@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">OBD2_2</string>
+    <string name="bt_init">Init Bluetooth</string>
+    <string name="veh_init">Select vehicle</string>
+    <string name="label_RPM">RPM</string>
+    <string name="label_Speed">Speed</string>
+    <string name="label_coolant">Coolant temperature</string>
+    <string name="unit_RPM">RPM</string>
+    <string name="unit_speed">km/h</string>
+    <string name="unit_temperature">°C</string>
+    <string name="zero">0</string>
+    <string name="live_data">Live data</string>
+    <string name="edit_command">OBD command</string>
+    <string name="btn_send">Send</string>
+    <string name="btn_terminal">Terminal</string>
+    <string name="tab_connection">Connection</string>
+    <string name="tab_terminal">Terminal</string>
+    <string name="tab_live">Live data</string>
+    <string name="tab_diagnosis">Diagnosis</string>
+
+
+</resources>
