@@ -1,6 +1,5 @@
 package obdtool.com.obd2_2.service;
 
-import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
@@ -10,21 +9,15 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.github.pires.obd.commands.protocol.EchoOffCommand;
-import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
 import com.github.pires.obd.commands.protocol.ObdResetCommand;
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
-import com.github.pires.obd.commands.protocol.TimeoutCommand;
 import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
 import com.github.pires.obd.enums.ObdProtocols;
 
 import java.io.IOException;
 
 import obdtool.com.obd2_2.util.BluetoothManager;
-import obdtool.com.obd2_2.util.Enums;
 import obdtool.com.obd2_2.util.ObdCommandJob;
-
-import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 /**
  * Created by Maki on 2017. 03. 22..
@@ -32,7 +25,7 @@ import static android.webkit.ConsoleMessage.MessageLevel.LOG;
 
 public class ObdService extends GatewayService {
 
-    BluetoothSocket btSocket = null;
+    private BluetoothSocket btSocket = null;
     private static final String COMP = ObdService.class.getName();
 
     private boolean isRunning=false;
@@ -43,13 +36,13 @@ public class ObdService extends GatewayService {
     public void startService(BluetoothDevice btDevice) {
         Log.d(COMP, "Connecting to Bluetooth device...");
         try {
-            if(btSocket!=null)
+            if(getBtSocket() !=null)
             {
-                if(btSocket.getRemoteDevice().equals(btDevice))
+                if(getBtSocket().getRemoteDevice().equals(btDevice))
                 {
-                    if(!btSocket.isConnected())
+                    if(!getBtSocket().isConnected())
                     {
-                        btSocket.connect();
+                        getBtSocket().connect();
                     }
                 }
                 else
@@ -68,7 +61,7 @@ public class ObdService extends GatewayService {
             stopService();
         }
 
-        if(btSocket==null)
+        if(getBtSocket() ==null)
         {
             Log.e(COMP, "Getting Bluetooth socket FAILED");
             stopService();
@@ -80,12 +73,12 @@ public class ObdService extends GatewayService {
 
     private void switchDevice(BluetoothDevice btDevice)
     {
-        if(btSocket!=null)
+        if(getBtSocket() !=null)
         {
-            if(btSocket.isConnected())
+            if(getBtSocket().isConnected())
             {
                 try {
-                    btSocket.close();
+                    getBtSocket().close();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -143,11 +136,11 @@ public class ObdService extends GatewayService {
         {
             job.setStatus(ObdCommandJob.ObdCommandJobStatus.RUNNING);
             try {
-                if (btSocket.isConnected()) {
-                    btSocket.connect();
+                if (getBtSocket().isConnected()) {
+                    getBtSocket().connect();
                 }
                 {
-                    job.getCommand().run(btSocket.getInputStream(), btSocket.getOutputStream());
+                    job.getCommand().run(getBtSocket().getInputStream(), getBtSocket().getOutputStream());
                 }
             } catch (Exception e) {
                 Log.e(COMP, "Unable to perform command");
@@ -166,9 +159,9 @@ public class ObdService extends GatewayService {
         queue.clear();
         //isRunning = false;
 
-        if (btSocket != null) {
+        if (getBtSocket() != null) {
             try {
-                btSocket.close();
+                getBtSocket().close();
             } catch (IOException e) {
                 Log.e(COMP, e.getMessage());
             }
@@ -194,6 +187,10 @@ public class ObdService extends GatewayService {
 
     public boolean isRunning() {
         return isRunning;
+    }
+
+    public BluetoothSocket getBtSocket() {
+        return btSocket;
     }
 
     public class ObdServiceBinder extends Binder {

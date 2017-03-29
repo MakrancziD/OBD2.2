@@ -2,6 +2,7 @@ package obdtool.com.obd2_2.activity;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -24,6 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.pires.obd.commands.ObdCommand;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -325,6 +328,20 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
         ObdCommandJob job = new ObdCommandJob(new CustomObdCommand(command));
         job = service.executeCommand(job);
         return job.getCommand().getResult();
+    }
+
+    public String ObdRawCommand(String command)
+    {
+        BluetoothSocket socket = service.getBtSocket();
+        ObdCommand job = new CustomObdCommand(command);
+        try {
+            job.run(socket.getInputStream(), socket.getOutputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return job.getResult();
     }
 
     public void updateState(Enums.connectionState _state)
