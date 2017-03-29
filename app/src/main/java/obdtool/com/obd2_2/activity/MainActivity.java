@@ -233,7 +233,11 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
             Log.d(COMP, "Binding OBD service..");
             updateState(Enums.connectionState.INIT_OBD);
             Intent serviceIntent = new Intent(this, ObdService.class);
-            bindService(serviceIntent, serviceConn, Context.BIND_AUTO_CREATE);
+            if(bindService(serviceIntent, serviceConn, Context.BIND_AUTO_CREATE))
+            {
+                Log.d(COMP, "bound true");
+            }
+            else {Log.d(COMP, "bound false");}
         }
     }
 
@@ -244,6 +248,8 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
             isServiceBound = true;
             service = ((ObdService.ObdServiceBinder) binder).getService();
             service.setContext(MainActivity.this);
+            //btnBt.setEnabled(true);
+            displayView(R.id.action_connection);
 //            Log.d(COMP, "Starting live data");
 //            try {
 //                service.startService();
