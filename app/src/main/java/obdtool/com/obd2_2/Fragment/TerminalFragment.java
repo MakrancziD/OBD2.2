@@ -57,7 +57,7 @@ public class TerminalFragment extends Fragment {
             public void onClick(View v) {
                 String command = editCommand.getText().toString();
                 items.add(command);
-                items.add(parentActivity.ObdRawCommand(command));
+                items.add(parentActivity.ObdCommand(command));
                 itemsAdapter.notifyDataSetChanged();
             }
         });
