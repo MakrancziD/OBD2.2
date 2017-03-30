@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import obdtool.com.obd2_2.Fragment.ConnectionFragment;
+import obdtool.com.obd2_2.Fragment.LiveFragment;
 import obdtool.com.obd2_2.Fragment.TerminalFragment;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.service.GatewayService;
@@ -41,10 +42,11 @@ import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.CustomObdCommand;
 import obdtool.com.obd2_2.util.Enums;
 import obdtool.com.obd2_2.util.ObdCommandJob;
+import obdtool.com.obd2_2.util.ReceiverFragment;
 
 import static obdtool.com.obd2_2.util.BottomNavigationViewHelper.disableShiftMode;
 
-public class MainActivity extends AppCompatActivity implements TerminalFragment.OnFragmentInteractionListener, ConnectionFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements TerminalFragment.OnFragmentInteractionListener, ConnectionFragment.OnFragmentInteractionListener, LiveFragment.OnFragmentInteractionListener {
 
     Button btnBt;
     Button btnVeh;
@@ -60,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
     private boolean isServiceBound;
     private ObdService service;
     private BluetoothDevice btDevice=null;
-
+    private ReceiverFragment currentFragment;
     private Context context;
 
 
@@ -132,19 +134,18 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
     }
 
     private void displayView(int itemId) {
-        Fragment fragment = null;
 
         switch (itemId) {
             case R.id.action_connection:
-                fragment = new ConnectionFragment();
+                currentFragment = new ConnectionFragment();
                 break;
             case R.id.action_terminal:
-                fragment = new TerminalFragment();
+                currentFragment = new TerminalFragment();
         }
 
-        if(fragment!=null) {
+        if(currentFragment!=null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.replace(R.id.nav_content, fragment);
+            ft.replace(R.id.nav_content, (Fragment)currentFragment);
             ft.commit();
         }
     }
@@ -344,10 +345,14 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
         return job.getResult();
     }
 
+    public void updateLive(ObdCommand cmd)
+    {
+        currentFragment.update(cmd);
+    }
+
     public void updateState(Enums.connectionState _state)
     {
         state=_state;
-        //connectionStatus.setText(state.toString());
     }
 
     private void ShowToast(String msg)
@@ -360,4 +365,6 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
 
 
     }
+
+
 }

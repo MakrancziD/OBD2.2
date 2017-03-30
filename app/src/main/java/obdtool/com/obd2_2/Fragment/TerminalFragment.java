@@ -14,13 +14,16 @@ import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.ScrollView;
 
+import com.github.pires.obd.commands.ObdCommand;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
+import obdtool.com.obd2_2.util.ReceiverFragment;
 
-public class TerminalFragment extends Fragment {
+public class TerminalFragment extends Fragment implements ReceiverFragment {
 
     Button btnSend;
     EditText editCommand;
@@ -55,14 +58,18 @@ public class TerminalFragment extends Fragment {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String command = editCommand.getText().toString();
-                items.add(command);
-                items.add(parentActivity.ObdCommand(command));
-                itemsAdapter.notifyDataSetChanged();
+                runCommand(editCommand.getText().toString());
             }
         });
 
         return view;
+    }
+
+    private void runCommand(String command)
+    {
+        items.add(command);
+        items.add(parentActivity.ObdCommand(command));
+        itemsAdapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -87,6 +94,11 @@ public class TerminalFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void update(ObdCommand cmd) {
+
     }
 
     /**

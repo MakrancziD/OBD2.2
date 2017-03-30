@@ -1,57 +1,69 @@
 package obdtool.com.obd2_2.Fragment;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.pires.obd.commands.ObdCommand;
+import com.github.pires.obd.enums.AvailableCommandNames;
+
+import org.w3c.dom.Text;
 
 import obdtool.com.obd2_2.R;
-import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
-public class ConnectionFragment extends Fragment implements ReceiverFragment {
+public class LiveFragment extends Fragment implements ReceiverFragment {
 
     private OnFragmentInteractionListener mListener;
-    private TextView connectionStatus;
-    private Button btnBt;
-    private MainActivity parentActivity;
 
-    public ConnectionFragment() {
+    private TextView tvRPM;
+    private TextView tvSpeed;
+    private TextView tvCoolant;
+
+    public LiveFragment() {
         // Required empty public constructor
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        parentActivity=(MainActivity)getActivity();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_connection, container, false);
+        View view =  inflater.inflate(R.layout.fragment_live, container, false);
 
-        connectionStatus=(TextView)view.findViewById(R.id.connectionStatus);
-
-        btnBt =(Button)view.findViewById(R.id.btnBluetooth);
-
-        btnBt.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                parentActivity.CheckBluetoothAdapter();
-            }
-        });
+        tvRPM=(TextView) view.findViewById(R.id.value_RPM);
+        tvSpeed=(TextView) view.findViewById(R.id.value_Speed);
+        tvCoolant=(TextView) view.findViewById(R.id.value_coolant);
 
         return view;
+    }
+
+    @Override
+    public void update(ObdCommand cmd)
+    {
+        switch(cmd.getName())
+        {
+            case "Engine RPM":
+                tvRPM.setText(cmd.getCalculatedResult());
+                break;
+            case "Vehicle Speed":
+                tvSpeed.setText(cmd.getCalculatedResult());
+                break;
+            case "Engine Coolant Temperature":
+                tvCoolant.setText(cmd.getCalculatedResult());
+                break;
+        }
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -78,21 +90,6 @@ public class ConnectionFragment extends Fragment implements ReceiverFragment {
         mListener = null;
     }
 
-    @Override
-    public void update(ObdCommand cmd) {
-
-    }
-
-    /**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     */
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);

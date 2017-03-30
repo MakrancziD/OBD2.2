@@ -9,6 +9,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.github.pires.obd.commands.ObdCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
 import com.github.pires.obd.commands.protocol.ObdResetCommand;
@@ -18,7 +19,10 @@ import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand
 import com.github.pires.obd.enums.ObdProtocols;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.ObdCommandJob;
 
@@ -34,7 +38,27 @@ public class ObdService extends GatewayService {
     private boolean isRunning=false;
     private Context context;
 
+    private List<ObdCommand> liveCommands = new ArrayList<>();
+
     private final IBinder binder = new ObdServiceBinder();
+
+    private Runnable queueCommands = new Runnable() {
+        @Override
+        public void run() {
+            if(isRunning && queue.size()==0)
+            {
+                for(ObdCommand cmd : liveCommands)
+                {
+                    addToQueue(new ObdCommandJob(cmd));
+                }
+            }
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    };
 
     public void startService(BluetoothDevice btDevice) {
         Log.d(COMP, "Connecting to Bluetooth device...");
@@ -103,6 +127,7 @@ public class ObdService extends GatewayService {
 
         executeCommand(new ObdCommandJob(new EngineCoolantTemperatureCommand()));
 
+
         Log.d(COMP, "OBD initialization completed");
         isRunning = true;
 
@@ -125,6 +150,16 @@ public class ObdService extends GatewayService {
             catch(Exception e)
             {
                 Log.e(COMP, "Unable to run command!"+e.getMessage());
+            }
+
+            if (job != null) {
+                final ObdCommandJob job2 = job;
+                ((MainActivity) context).runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((MainActivity) context).updateLive(job2.getCommand());
+                    }
+                });
             }
 
             //store response, update UI
@@ -192,6 +227,14 @@ public class ObdService extends GatewayService {
 
     public BluetoothSocket getBtSocket() {
         return btSocket;
+    }
+
+    public List<ObdCommand> getLiveCommands() {
+        return liveCommands;
+    }
+
+    public void setLiveCommands(List<ObdCommand> liveCommands) {
+        this.liveCommands = liveCommands;
     }
 
     public class ObdServiceBinder extends Binder {

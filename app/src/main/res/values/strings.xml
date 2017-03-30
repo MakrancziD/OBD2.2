@@ -18,5 +18,8 @@
     <string name="tab_live">Live data</string>
     <string name="tab_diagnosis">Diagnosis</string>
 
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 
 </resources>
