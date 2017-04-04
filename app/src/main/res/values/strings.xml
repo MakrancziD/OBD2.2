@@ -17,9 +17,17 @@
     <string name="tab_terminal">Terminal</string>
     <string name="tab_live">Live data</string>
     <string name="tab_diagnosis">Diagnosis</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="label_mil">MIL</string>
+    <string name="label_DTC_list">DTC list</string>
+    <string name="btn_clearDTC">Clear DTC</string>
+    <string name="label_fuel_sys_stat">Fuel system status</string>
+        <string name="fuel_sys_01">Open loop due to insufficient engine temperature</string>
+        <string name="fuel_sys_02">Closed loop, using oxygen sensor feedback to determine fuel mix</string>
+        <string name="fuel_sys_04">Open loop due to engine load OR fuel cut due to deceleration</string>
+        <string name="fuel_sys_08">Open loop due to system failure</string>
+        <string name="fuel_sys_16">	Closed loop, using at least one oxygen sensor but there is a fault in the feedback system</string>
+    <string name="label_O2_sensors">O2 sensors</string>
+    <string name="label_O2_tests">O2 test results</string>
 
 
 </resources>

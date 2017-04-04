@@ -40,7 +40,7 @@ import obdtool.com.obd2_2.service.GatewayService;
 import obdtool.com.obd2_2.service.ObdService;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.CustomObdCommand;
-import obdtool.com.obd2_2.util.Enums;
+import obdtool.com.obd2_2.util.Enum;
 import obdtool.com.obd2_2.util.ObdCommandJob;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
@@ -58,7 +58,7 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
 
     private static final int REQUEST_ENABLE_BT = 1111;
     private static final String COMP = MainActivity.class.getName();
-    public Enums.connectionState state = Enums.connectionState.DISCONNECTED;
+    public Enum.connectionState state = Enum.connectionState.DISCONNECTED;
     private boolean isServiceBound;
     private ObdService service;
     private BluetoothDevice btDevice=null;
@@ -179,7 +179,7 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
 
     private boolean SelectBtDevice() {
         //TODO: store default device and try to connect to it automatically on startup
-        updateState(Enums.connectionState.BLUETOOTH_ON);
+        updateState(Enum.connectionState.BLUETOOTH_ON);
 
         List<String> deviceInfo = new ArrayList<>();
 
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
     private void doBindService() {
         if (!isServiceBound) {
             Log.d(COMP, "Binding OBD service..");
-            updateState(Enums.connectionState.INIT_OBD);
+            updateState(Enum.connectionState.INIT_OBD);
             Intent serviceIntent = new Intent(this, ObdService.class);
             if(bindService(serviceIntent, serviceConn, Context.BIND_AUTO_CREATE))
             {
@@ -350,7 +350,7 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
         currentFragment.update(cmd);
     }
 
-    public void updateState(Enums.connectionState _state)
+    public void updateState(Enum.connectionState _state)
     {
         state=_state;
     }
