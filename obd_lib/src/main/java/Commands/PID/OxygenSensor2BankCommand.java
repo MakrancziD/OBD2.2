@@ -1,4 +1,4 @@
-package obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01;
+package Commands.PID;
 
 import com.github.pires.obd.commands.ObdCommand;
 
@@ -6,8 +6,8 @@ import com.github.pires.obd.commands.ObdCommand;
  * Created by Maki on 2017. 04. 03..
  */
 
-public class SecondaryAirStatusCommand extends ObdCommand {
-    public SecondaryAirStatusCommand(String command) {
+public class OxygenSensor2BankCommand extends ObdCommand {
+    public OxygenSensor2BankCommand(String command) {
         super(command);
     }
 

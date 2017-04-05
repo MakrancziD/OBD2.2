@@ -15,16 +15,9 @@ import com.github.pires.obd.commands.temperature.AirIntakeTemperatureCommand;
 import com.github.pires.obd.commands.temperature.EngineCoolantTemperatureCommand;
 import com.github.pires.obd.enums.FuelTrim;
 
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.AuxInputStatusCommand;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.FreezeDTC;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.FuelSystemStatus;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.MonitorStatus;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.ObdStandardCommand;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.OxygenSensor2BankCommand;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.OxygenSensor4BankCommand;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.OxygenSensorCommand;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.PIDSupport;
-import obdtool.com.obd2_2.ObdCommands.OBD_ext.Service01.SecondaryAirStatusCommand;
+import Commands.PID.FreezeDTC;
+import Commands.PID.FuelSystemStatus;
+import Commands.PID.MonitorStatus;
 import obdtool.com.obd2_2.enums.PIDsupport;
 import obdtool.com.obd2_2.util.Enum;
 

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/OBD2_2.iml" filepath="$PROJECT_DIR$/OBD2_2.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/obd_lib/obd_lib.iml" filepath="$PROJECT_DIR$/obd_lib/obd_lib.iml" />
     </modules>
   </component>
 </project>
