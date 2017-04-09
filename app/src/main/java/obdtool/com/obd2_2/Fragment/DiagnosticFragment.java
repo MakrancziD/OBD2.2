@@ -70,6 +70,8 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
         dtcAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, itemsDTC);
         dtcList.setAdapter(dtcAdapter);
 
+        new loadDiagDataAsync().execute();
+
         return v;
     }
 
@@ -115,7 +117,7 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
         @Override
         protected void onPreExecute()
         {
-            loadingDialog = ProgressDialog.show(getActivity(), "Collecting Diagnostic data, please wait...", "?");
+            loadingDialog = ProgressDialog.show(getActivity(), "Collecting Diagnostic data, please wait...", "Loading...");
             loadingDialog.setCancelable(true);
         }
 
@@ -139,8 +141,9 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
         private void refreshView()
         {
             milOn.setText(currentMonitorStatus.isMilOn()?R.string.on:R.string.off);
-            dtcCnt.setText(currentMonitorStatus.getNumOfDTCs());
-            itemsDTC = Arrays.asList(currentDTCs.getCalculatedResult().split("\n"));
+            dtcCnt.setText(Integer.toString(currentMonitorStatus.getNumOfDTCs()));
+            itemsDTC.clear();
+            itemsDTC.addAll(Arrays.asList(currentDTCs.getCalculatedResult().split("\n")));
             dtcAdapter.notifyDataSetChanged();
         }
     }

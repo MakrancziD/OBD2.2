@@ -34,11 +34,18 @@
         android:layout_below="@id/mil_status"
         android:layout_marginStart="50dp"/>
 
+    <TextView
+        android:id="@+id/tests"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dtc"
+        android:text="@string/none"/>
+
     <ListView
         android:id="@+id/list_DTC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/dtc"
+        android:layout_below="@id/tests"
         android:layout_marginTop="20dp"/>
 
     <Button

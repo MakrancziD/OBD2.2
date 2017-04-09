@@ -44,14 +44,14 @@ public class MonitorStatusCommand extends ObdCommand {
         {
             if(B.get(i))
             {
-                getTestMap().put(Tests.getByCode(i, 0), B.get(i+4));
+                testMap.put(Tests.getByCode(i, 0), B.get(i+4));
             }
         }
         for(int i=0;i<8;i++)
         {
             if(C.get(i))
             {
-                getTestMap().put(Tests.getByCode(i, isCompIgn() ?2:1), D.get(i));
+                testMap.put(Tests.getByCode(i, isCompIgn() ?2:1), D.get(i));
             }
         }
     }
