@@ -10,6 +10,7 @@ import android.support.v4.content.LocalBroadcastManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.github.pires.obd.commands.ObdCommand;
@@ -24,6 +25,7 @@ import Commands.PID.RPMCommand;
 import Commands.PID.SpeedCommand;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
+import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
 public class LiveFragment extends Fragment implements ReceiverFragment {
@@ -33,6 +35,11 @@ public class LiveFragment extends Fragment implements ReceiverFragment {
     private TextView tvRPM;
     private TextView tvSpeed;
     private TextView tvCoolant;
+    private Button btnStartStop;
+
+    private boolean liveRecording = false;
+
+    List<ObdCommand> cmdList = new ArrayList<>();
 
     private MainActivity parentActivity;
 
@@ -44,6 +51,11 @@ public class LiveFragment extends Fragment implements ReceiverFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentActivity = (MainActivity) getActivity();
+
+        cmdList.add(new SpeedCommand());
+        cmdList.add(new RPMCommand());
+        cmdList.add(new EngineCoolantTemperatureCommand());
+        //TODO: dynamic command loading!
     }
 
     @Override
@@ -55,15 +67,39 @@ public class LiveFragment extends Fragment implements ReceiverFragment {
         tvSpeed=(TextView) view.findViewById(R.id.value_Speed);
         tvCoolant=(TextView) view.findViewById(R.id.value_coolant);
 
-        List<ObdCommand> cmdList = new ArrayList<>();
-        cmdList.add(new SpeedCommand());
-        cmdList.add(new RPMCommand());
-        cmdList.add(new EngineCoolantTemperatureCommand());
+        btnStartStop = (Button) view.findViewById(R.id.btnStartStop);
+        btnStartStop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(liveRecording)
+                {
+                    stopRecording();
+                }
+                else
+                {
+                    startRecording();
+                }
+            }
+        });
 
-        parentActivity.initLiveCommands(cmdList);
-        parentActivity.enableQueue(true);
+        DbHandler.startTrip();
 
         return view;
+    }
+
+    private void startRecording()
+    {
+        parentActivity.initLiveCommands(cmdList);
+        DbHandler.startTrip();
+        parentActivity.enableQueue(true);
+        this.liveRecording=true;
+    }
+
+    private void stopRecording()
+    {
+        parentActivity.enableQueue(false);
+        DbHandler.endTrip();
+        this.liveRecording=false;
     }
 
     @Override
@@ -105,6 +141,13 @@ public class LiveFragment extends Fragment implements ReceiverFragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        parentActivity.enableQueue(false);
+        DbHandler.endTrip();
     }
 
     public interface OnFragmentInteractionListener {

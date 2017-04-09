@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import obdtool.com.obd2_2.activity.MainActivity;
+import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.ObdCommandJob;
 
@@ -161,6 +162,7 @@ public class ObdService extends GatewayService {
                 });
             }
 
+            DbHandler.storeObd(job.getCommand());
             //store response, update UI
         }
     }

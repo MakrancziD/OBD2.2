@@ -36,9 +36,11 @@ import obdtool.com.obd2_2.Fragment.ConnectionFragment;
 import obdtool.com.obd2_2.Fragment.DiagnosticFragment;
 import obdtool.com.obd2_2.Fragment.LiveFragment;
 import obdtool.com.obd2_2.Fragment.TerminalFragment;
+import obdtool.com.obd2_2.Fragment.TripFragment;
 import obdtool.com.obd2_2.Fragment.VehicleFragment;
 import obdtool.com.obd2_2.R;
-import obdtool.com.obd2_2.service.GatewayService;
+import obdtool.com.obd2_2.db.DbHandler;
+import obdtool.com.obd2_2.db.Model.Trip;
 import obdtool.com.obd2_2.service.ObdService;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.CustomObdCommand;
@@ -52,7 +54,8 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
         ConnectionFragment.OnFragmentInteractionListener,
         LiveFragment.OnFragmentInteractionListener,
         VehicleFragment.OnFragmentInteractionListener,
-        DiagnosticFragment.OnFragmentInteractionListener{
+        DiagnosticFragment.OnFragmentInteractionListener,
+        TripFragment.OnListFragmentInteractionListener{
 
     Button btnBt;
     Button btnVeh;
@@ -70,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
     private BluetoothDevice btDevice=null;
     private ReceiverFragment currentFragment;
     private Context context;
+
+
 
 
     @Override
@@ -115,26 +120,8 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
 //        });
 
         doBindService();
+        DbHandler.initDb(context);
 
-//        DbHelper db = new DbHelper(this);
-//        Dao<Vehicle, Integer> vehicleDao = null;
-//        Dao<Trip, Integer> tripDao = null;
-//        Trip t = null;
-//        try {
-//            vehicleDao=db.getDao(Vehicle.class);
-//            vehicleDao.create(new Vehicle("Batmobile"));
-//            Vehicle myVehicle = vehicleDao.queryForAll().get(0);
-//            tripDao = db.getDao(Trip.class);
-//            Date date = new Date();
-//            tripDao.create(new Trip(date, myVehicle));
-//            t=tripDao.queryForAll().get(0);
-//
-//        } catch (SQLException e) {
-//            Log.e(COMP, e.getMessage());
-//        }
-//
-//        tv=(TextView)findViewById(R.id.textView);
-//        tv.setText(t.toString());
 
 
     }
@@ -156,6 +143,10 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
                 break;
             case R.id.action_diag:
                 currentFragment = new DiagnosticFragment();
+                break;
+            case R.id.action_trip:
+                currentFragment = new TripFragment();
+                break;
         }
 
         if(currentFragment!=null) {
@@ -395,8 +386,10 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
     @Override
     public void onFragmentInteraction(Uri uri) {
 
-
     }
 
+    @Override
+    public void onListFragmentInteraction(Trip item) {
 
+    }
 }

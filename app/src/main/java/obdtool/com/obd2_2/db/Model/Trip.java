@@ -40,7 +40,7 @@ public class Trip {
 
     public ForeignCollection<ObdEntry> getObdEntries()
     {
-        return obd_entries;
+        return getObd_entries();
     }
 
     @ForeignCollectionField(columnName = FIELD_NAME_SENSOR_ENTRIES, eager=true)
@@ -48,7 +48,7 @@ public class Trip {
 
     public ForeignCollection<SensorEntry> getSensorEntries()
     {
-        return sensor_entries;
+        return getSensor_entries();
     }
 
     public Trip() {}
@@ -62,6 +62,34 @@ public class Trip {
     @Override
     public String toString()
     {
-        return this.ID_trip+" - "+this.start_time+" - "+this.vehicle_ID;
+        return this.getID_trip() +" - "+ this.getStart_time() +" - "+ this.getVehicle_ID();
+    }
+
+    public int getID_trip() {
+        return ID_trip;
+    }
+
+    public Date getStart_time() {
+        return start_time;
+    }
+
+    public Date getEnd_time() {
+        return end_time;
+    }
+
+    public Vehicle getVehicle_ID() {
+        return vehicle_ID;
+    }
+
+    public ForeignCollection<ObdEntry> getObd_entries() {
+        return obd_entries;
+    }
+
+    public ForeignCollection<SensorEntry> getSensor_entries() {
+        return sensor_entries;
+    }
+
+    public void setEnd_time(Date end_time) {
+        this.end_time = end_time;
     }
 }

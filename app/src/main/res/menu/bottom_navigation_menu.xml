@@ -23,4 +23,9 @@
         android:icon="@android:drawable/ic_dialog_info"
         android:title="@string/tab_vehicle_info"/>
 
+    <item
+        android:id="@+id/action_trip"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="@string/tab_trip"/>
+
 </menu>

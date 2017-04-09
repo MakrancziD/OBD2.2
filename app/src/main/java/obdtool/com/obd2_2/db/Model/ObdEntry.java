@@ -40,4 +40,13 @@ public class ObdEntry {
     private Trip trip_ID;
 
     public ObdEntry() {}
+
+    public ObdEntry(Date timestamp, String req, String resp, String calcData, Trip t)
+    {
+        this.timestamp = timestamp;
+        this.request = req;
+        this.response = resp;
+        this.formatted_data = calcData;
+        this.trip_ID = t;
+    }
 }
