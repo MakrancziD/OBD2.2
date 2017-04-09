@@ -18,4 +18,9 @@
         android:icon="@android:drawable/ic_dialog_info"
         android:title="@string/tab_diagnosis"/>
 
+    <item
+        android:id="@+id/action_vehicle"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="@string/tab_vehicle_info"/>
+
 </menu>

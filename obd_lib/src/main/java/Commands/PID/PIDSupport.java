@@ -5,8 +5,7 @@ import com.github.pires.obd.commands.ObdCommand;
 import java.util.ArrayList;
 import java.util.List;
 
-import obdtool.com.obd2_2.ObdCommands.CommandHelper;
-import obdtool.com.obd2_2.enums.PIDsupport;
+import Util.CommandHelper;
 
 /**
  * Created by Maki on 2017. 04. 03..
@@ -17,9 +16,9 @@ public class PIDSupport extends ObdCommand {
     String binResult= new String();
     private List<ObdCommand> supportedCommands = new ArrayList<>();
 
-    private final PIDsupport range;
+    private final Enums.PIDsupport range;
 
-    public PIDSupport(final PIDsupport range) {
+    public PIDSupport(final Enums.PIDsupport range) {
         super(range.buildObdCommand());
         this.range=range;
     }

@@ -9,9 +9,18 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
 
-import com.github.pires.obd.commands.ObdCommand;
+import com.github.pires.obd.commands.control.TroubleCodesCommand;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import Commands.PID.MonitorStatusCommand;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
 
@@ -19,6 +28,17 @@ public class DiagnosticFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private MainActivity parentActivity;
+
+    private TextView milOn;
+    private TextView dtcCnt;
+    private ListView dtcList;
+    private Button btnClear;
+
+    private MonitorStatusCommand currentMonitorStatus;
+    private TroubleCodesCommand currentDTCs;
+
+    private List<String> itemsDTC = new ArrayList<>();
+    private ArrayAdapter<String> dtcAdapter =null;
 
     public DiagnosticFragment() {
         // Required empty public constructor
@@ -39,7 +59,16 @@ public class DiagnosticFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_diagnostic, container, false);
+        View v = inflater.inflate(R.layout.fragment_diagnostic, container, false);
+        milOn = (TextView) v.findViewById(R.id.mil_status);
+        dtcCnt = (TextView) v.findViewById(R.id.dtc_cnt);
+        dtcList = (ListView) v.findViewById(R.id.list_DTC);
+        btnClear = (Button) v.findViewById(R.id.btn_clear);
+
+        dtcAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, itemsDTC);
+        dtcList.setAdapter(dtcAdapter);
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -85,8 +114,9 @@ public class DiagnosticFragment extends Fragment {
 
         @Override
         protected String doInBackground(String... params) {
-            String monitorStatus = parentActivity.ObdCommand("01 01");
-            String dtcList = parentActivity.ObdCommand("03");
+            currentMonitorStatus = (MonitorStatusCommand) parentActivity.ObdCommand(new MonitorStatusCommand());
+            currentDTCs = (TroubleCodesCommand) parentActivity.ObdCommand(new TroubleCodesCommand());
+
             String fuelSys = parentActivity.ObdCommand("01 03");
 
             return "?";
@@ -96,7 +126,15 @@ public class DiagnosticFragment extends Fragment {
         protected void onPostExecute(String s)
         {
             loadingDialog.dismiss();
-            //ShowToast(s.equals("OK")?"Connected":"REKT");
+            refreshView();
+        }
+
+        private void refreshView()
+        {
+            milOn.setText(currentMonitorStatus.isMilOn()?R.string.on:R.string.off);
+            dtcCnt.setText(currentMonitorStatus.getNumOfDTCs());
+            itemsDTC = Arrays.asList(currentDTCs.getCalculatedResult().split("\n"));
+            dtcAdapter.notifyDataSetChanged();
         }
     }
 }

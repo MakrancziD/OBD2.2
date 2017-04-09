@@ -1,4 +1,4 @@
-package obdtool.com.obd2_2.enums;
+package Enums;
 
 import java.util.HashMap;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package obdtool.com.obd2_2.enums;
+package Enums;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,26 +21,30 @@ public enum OxygenSensor {
 
     static {
         for (OxygenSensor o2sensor : OxygenSensor.values())
-            map.put(o2sensor.getValue(), o2sensor);
+            map.put(o2sensor.getCode(), o2sensor);
     }
 
-    private final int value;
+    private final int code;
     private final String sensor;
 
-    private OxygenSensor(final int value, final String bank) {
-        this.value = value;
-        this.sensor = bank;
+    private OxygenSensor(final int code, final String sensor) {
+        this.code = code;
+        this.sensor = sensor;
     }
 
-    public int getValue() {
-        return value;
+    public int getCode() {
+        return code;
     }
 
     public String getSensor() {
         return sensor;
     }
 
+    public OxygenSensor getByCode(int code) {
+        return map.get(code);
+    }
+
     public final String buildObdCommand() {
-        return new String("01 " + value);
+        return new String("01 " + code);
     }
 }

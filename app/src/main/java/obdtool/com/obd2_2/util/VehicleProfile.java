@@ -5,4 +5,7 @@ package obdtool.com.obd2_2.util;
  */
 
 public class VehicleProfile {
+
+    private String name;
+
 }

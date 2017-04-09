@@ -35,6 +35,7 @@ import java.util.List;
 import obdtool.com.obd2_2.Fragment.ConnectionFragment;
 import obdtool.com.obd2_2.Fragment.LiveFragment;
 import obdtool.com.obd2_2.Fragment.TerminalFragment;
+import obdtool.com.obd2_2.Fragment.VehicleFragment;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.service.GatewayService;
 import obdtool.com.obd2_2.service.ObdService;
@@ -46,7 +47,7 @@ import obdtool.com.obd2_2.util.ReceiverFragment;
 
 import static obdtool.com.obd2_2.util.BottomNavigationViewHelper.disableShiftMode;
 
-public class MainActivity extends AppCompatActivity implements TerminalFragment.OnFragmentInteractionListener, ConnectionFragment.OnFragmentInteractionListener, LiveFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements TerminalFragment.OnFragmentInteractionListener, ConnectionFragment.OnFragmentInteractionListener, LiveFragment.OnFragmentInteractionListener, VehicleFragment.OnFragmentInteractionListener {
 
     Button btnBt;
     Button btnVeh;
@@ -141,6 +142,13 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
                 break;
             case R.id.action_terminal:
                 currentFragment = new TerminalFragment();
+                break;
+            case R.id.action_live:
+                currentFragment = new LiveFragment();
+                break;
+            case R.id.action_vehicle:
+                currentFragment = new VehicleFragment();
+                break;
         }
 
         if(currentFragment!=null) {
@@ -329,6 +337,13 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
         ObdCommandJob job = new ObdCommandJob(new CustomObdCommand(command));
         job = service.executeCommand(job);
         return job.getCommand().getResult();
+    }
+
+    public ObdCommand ObdCommand(ObdCommand command)
+    {
+        ObdCommandJob job = new ObdCommandJob(command);
+        job = service.executeCommand(job);
+        return job.getCommand();
     }
 
     public String ObdRawCommand(String command)
