@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import obdtool.com.obd2_2.Fragment.ConnectionFragment;
+import obdtool.com.obd2_2.Fragment.DiagnosticFragment;
 import obdtool.com.obd2_2.Fragment.LiveFragment;
 import obdtool.com.obd2_2.Fragment.TerminalFragment;
 import obdtool.com.obd2_2.Fragment.VehicleFragment;
@@ -149,6 +150,8 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
             case R.id.action_vehicle:
                 currentFragment = new VehicleFragment();
                 break;
+            case R.id.action_diag:
+                currentFragment = new DiagnosticFragment();
         }
 
         if(currentFragment!=null) {

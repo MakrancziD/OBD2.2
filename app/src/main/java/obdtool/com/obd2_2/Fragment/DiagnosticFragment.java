@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.github.pires.obd.commands.ObdCommand;
 import com.github.pires.obd.commands.control.TroubleCodesCommand;
 
 import java.util.ArrayList;
@@ -23,8 +24,9 @@ import java.util.List;
 import Commands.PID.MonitorStatusCommand;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
+import obdtool.com.obd2_2.util.ReceiverFragment;
 
-public class DiagnosticFragment extends Fragment {
+public class DiagnosticFragment extends Fragment implements ReceiverFragment {
 
     private OnFragmentInteractionListener mListener;
     private MainActivity parentActivity;
@@ -93,6 +95,11 @@ public class DiagnosticFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void update(ObdCommand cmd) {
+        
     }
 
     public interface OnFragmentInteractionListener {
