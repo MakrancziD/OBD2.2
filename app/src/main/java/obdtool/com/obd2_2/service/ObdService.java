@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -53,11 +54,7 @@ public class ObdService extends GatewayService {
                     addToQueue(new ObdCommandJob(cmd));
                 }
             }
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            new Handler().postDelayed(queueCommands, 100);
         }
     };
 
