@@ -35,6 +35,7 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
     private TextView dtcCnt;
     private ListView dtcList;
     private Button btnClear;
+    private TextView testResults;
 
     private MonitorStatusCommand currentMonitorStatus;
     private TroubleCodesCommand currentDTCs;
@@ -66,6 +67,7 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
         dtcCnt = (TextView) v.findViewById(R.id.dtc_cnt);
         dtcList = (ListView) v.findViewById(R.id.list_DTC);
         btnClear = (Button) v.findViewById(R.id.btn_clear);
+        testResults = (TextView) v.findViewById(R.id.tests);
 
         dtcAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, itemsDTC);
         dtcList.setAdapter(dtcAdapter);
@@ -142,6 +144,7 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
         {
             milOn.setText(currentMonitorStatus.isMilOn()?R.string.on:R.string.off);
             dtcCnt.setText(Integer.toString(currentMonitorStatus.getNumOfDTCs()));
+            testResults.setText(currentMonitorStatus.getCalculatedResult());
             itemsDTC.clear();
             itemsDTC.addAll(Arrays.asList(currentDTCs.getCalculatedResult().split("\n")));
             dtcAdapter.notifyDataSetChanged();

@@ -66,12 +66,12 @@ public class MonitorStatusCommand extends ObdCommand {
         StringBuilder sb = new StringBuilder();
         sb.append("MIL: ");
         sb.append(isMilOn()?"ON":"OFF");
-        sb.append("/n");
+        sb.append("\n");
         sb.append("DTC: ");
         sb.append(numOfDTCs);
-        sb.append("/n");
+        sb.append("\n");
         sb.append("Tests:");
-        sb.append("/n");
+        sb.append("\n");
         for(Map.Entry<Tests, Boolean> t : testMap.entrySet())
         {
             sb.append(t.getKey().getTest());

@@ -110,7 +110,7 @@ public class CommandHelper {
     public static List<Boolean> byteToBoolList(int a)
     {
         List<Boolean> out = new ArrayList<>();
-        String s = Integer.toString(a, 2);
+        String s = String.format("%8b", a);
         for(char c : s.toCharArray())
         {
             out.add(c=='1');
