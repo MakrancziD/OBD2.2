@@ -138,9 +138,9 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
             case R.id.action_live:
                 currentFragment = new LiveFragment();
                 break;
-            case R.id.action_vehicle:
-                currentFragment = new VehicleFragment();
-                break;
+//            case R.id.action_vehicle:
+//                currentFragment = new VehicleFragment();
+//                break;
             case R.id.action_diag:
                 currentFragment = new DiagnosticFragment();
                 break;
