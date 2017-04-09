@@ -36,6 +36,7 @@ public class ObdService extends GatewayService {
     private static final String COMP = ObdService.class.getName();
 
     private boolean isRunning=false;
+    private boolean queuingEnabled = false;
     private Context context;
 
     private List<ObdCommand> liveCommands = new ArrayList<>();
@@ -45,7 +46,7 @@ public class ObdService extends GatewayService {
     private Runnable queueCommands = new Runnable() {
         @Override
         public void run() {
-            if(isRunning && queue.size()==0)
+            if(isQueuingEnabled() && isRunning && queue.size()==0)
             {
                 for(ObdCommand cmd : liveCommands)
                 {
@@ -127,6 +128,7 @@ public class ObdService extends GatewayService {
 
         executeCommand(new ObdCommandJob(new EngineCoolantTemperatureCommand()));
 
+        queueCommands.run();
 
         Log.d(COMP, "OBD initialization completed");
         isRunning = true;
@@ -235,6 +237,14 @@ public class ObdService extends GatewayService {
 
     public void setLiveCommands(List<ObdCommand> liveCommands) {
         this.liveCommands = liveCommands;
+    }
+
+    public boolean isQueuingEnabled() {
+        return queuingEnabled;
+    }
+
+    public void setQueuingEnabled(boolean queuingEnabled) {
+        this.queuingEnabled = queuingEnabled;
     }
 
     public class ObdServiceBinder extends Binder {

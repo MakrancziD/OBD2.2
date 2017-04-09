@@ -367,6 +367,16 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
         return job.getResult();
     }
 
+    public void enableQueue(boolean q)
+    {
+        service.setQueuingEnabled(q);
+    }
+
+    public void initLiveCommands(List<ObdCommand> cmdList)
+    {
+        service.setLiveCommands(cmdList);
+    }
+
     public void updateLive(ObdCommand cmd)
     {
         currentFragment.update(cmd);
