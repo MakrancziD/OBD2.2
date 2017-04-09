@@ -48,7 +48,11 @@ import obdtool.com.obd2_2.util.ReceiverFragment;
 
 import static obdtool.com.obd2_2.util.BottomNavigationViewHelper.disableShiftMode;
 
-public class MainActivity extends AppCompatActivity implements TerminalFragment.OnFragmentInteractionListener, ConnectionFragment.OnFragmentInteractionListener, LiveFragment.OnFragmentInteractionListener, VehicleFragment.OnFragmentInteractionListener {
+public class MainActivity extends AppCompatActivity implements TerminalFragment.OnFragmentInteractionListener,
+        ConnectionFragment.OnFragmentInteractionListener,
+        LiveFragment.OnFragmentInteractionListener,
+        VehicleFragment.OnFragmentInteractionListener,
+        DiagnosticFragment.OnFragmentInteractionListener{
 
     Button btnBt;
     Button btnVeh;

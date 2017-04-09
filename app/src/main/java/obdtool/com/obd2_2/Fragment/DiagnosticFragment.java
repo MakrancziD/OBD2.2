@@ -99,7 +99,7 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
 
     @Override
     public void update(ObdCommand cmd) {
-        
+
     }
 
     public interface OnFragmentInteractionListener {
