@@ -7,8 +7,8 @@ import com.github.pires.obd.commands.ObdCommand;
  */
 
 public class FreezeDTCCommand extends ObdCommand {
-    public FreezeDTCCommand(String command) {
-        super(command);
+    public FreezeDTCCommand() {
+        super("01 02");
     }
 
     /** Constant <code>dtcLetters={'P', 'C', 'B', 'U'}</code> */

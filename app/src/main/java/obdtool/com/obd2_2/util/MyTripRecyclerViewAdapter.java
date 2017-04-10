@@ -33,7 +33,7 @@ public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecycl
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getID_trip());
+        holder.mIdView.setText(Integer.toString(mValues.get(position).getID_trip()));
         holder.mContentView.setText(mValues.get(position).getStart_time().toString());
 
         holder.mView.setOnClickListener(new View.OnClickListener() {

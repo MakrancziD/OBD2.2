@@ -7,8 +7,8 @@ import com.github.pires.obd.commands.ObdCommand;
  */
 
 public class OxygenSensor4BankCommand extends ObdCommand {
-    public OxygenSensor4BankCommand(String command) {
-        super(command);
+    public OxygenSensor4BankCommand() {
+        super("01 1D");
     }
 
     @Override

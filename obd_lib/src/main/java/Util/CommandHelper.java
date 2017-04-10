@@ -42,9 +42,9 @@ public class CommandHelper {
             case 0x01:
                 return new MonitorStatusCommand();
             case 0x02:
-                return new FreezeDTCCommand("");
+                return new FreezeDTCCommand();
             case 0x03:
-                return new FuelSystemStatusCommand("");
+                return new FuelSystemStatusCommand();
             case 0x04:
                 return new LoadCommand();
             case 0x05:
@@ -74,9 +74,9 @@ public class CommandHelper {
             case 0x11:
                 return new ThrottlePositionCommand();
             case 0x12:
-                return new SecondaryAirStatusCommand("");
+                return new SecondaryAirStatusCommand();
             case 0x13:
-                return new OxygenSensor2BankCommand("");
+                return new OxygenSensor2BankCommand();
             case 0x14:
                 return new OxygenSensorCommand(Enum.oxygenSensor.OXYGEN_SENSOR_1);
             case 0x15:
@@ -94,11 +94,11 @@ public class CommandHelper {
             case 0x1B:
                 return new OxygenSensorCommand(Enum.oxygenSensor.OXYGEN_SENSOR_8);
             case 0x1C:
-                return new ObdStandardCommand("");
+                return new ObdStandardCommand();
             case 0x1D:
-                return new OxygenSensor4BankCommand("");
+                return new OxygenSensor4BankCommand();
             case 0x1E:
-                return new AuxInputStatusCommand("");
+                return new AuxInputStatusCommand();
             case 0x1F:
                 return new RuntimeCommand();
             case 0x20:

@@ -2,18 +2,22 @@ package Commands.PID;
 
 import com.github.pires.obd.commands.ObdCommand;
 
+import Enums.SecondaryAirStatus;
+
 /**
  * Created by Maki on 2017. 04. 03..
  */
 
 public class SecondaryAirStatusCommand extends ObdCommand {
-    public SecondaryAirStatusCommand(String command) {
-        super(command);
+    public SecondaryAirStatusCommand() {
+        super("01 12");
     }
+
+    SecondaryAirStatus status;
 
     @Override
     protected void performCalculations() {
-
+        status = SecondaryAirStatus.getByCode(buffer.get(2));
     }
 
     @Override
@@ -23,7 +27,7 @@ public class SecondaryAirStatusCommand extends ObdCommand {
 
     @Override
     public String getCalculatedResult() {
-        return null;
+        return status.getStatus();
     }
 
     @Override

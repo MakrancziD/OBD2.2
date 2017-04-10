@@ -14,9 +14,16 @@ public class OxygenSensorCommand extends ObdCommand {
         super(sensor.toString()); //TODO!!!
     }
 
+    private double voltage;
+    private double trim;
+
     @Override
     protected void performCalculations() {
+        int A = Integer.parseInt(Integer.toString(buffer.get(2), 10));
+        int B = Integer.parseInt(Integer.toString(buffer.get(2), 10));
 
+        voltage = A/200;
+        trim = (B/1.28)-100;
     }
 
     @Override
@@ -26,7 +33,7 @@ public class OxygenSensorCommand extends ObdCommand {
 
     @Override
     public String getCalculatedResult() {
-        return null;
+        return voltage +"V "+trim+"%";
     }
 
     @Override

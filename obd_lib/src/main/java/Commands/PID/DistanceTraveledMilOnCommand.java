@@ -2,21 +2,23 @@ package Commands.PID;
 
 import com.github.pires.obd.commands.ObdCommand;
 
-import Enums.ObdStandard;
-
 /**
- * Created by Maki on 2017. 04. 03..
+ * Created by makra on 2017. 04. 10..
  */
 
-public class ObdStandardCommand extends ObdCommand {
-    public ObdStandardCommand() {
-        super("01 1C");
+public class DistanceTraveledMilOnCommand extends ObdCommand {
+    public DistanceTraveledMilOnCommand() {
+        super("01 21");
     }
 
-    ObdStandard std;
+    private int distance;
+
     @Override
     protected void performCalculations() {
-        std = Enums.ObdStandard.getByCode(buffer.get(2));
+        int A = buffer.get(2);
+        int B = buffer.get(3);
+
+        distance = 256*A+B;
     }
 
     @Override
@@ -26,7 +28,7 @@ public class ObdStandardCommand extends ObdCommand {
 
     @Override
     public String getCalculatedResult() {
-        return std.getStatus();
+        return String.valueOf(distance);
     }
 
     @Override

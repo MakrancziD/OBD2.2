@@ -7,13 +7,15 @@ import com.github.pires.obd.commands.ObdCommand;
  */
 
 public class AuxInputStatusCommand extends ObdCommand {
-    public AuxInputStatusCommand(String command) {
-        super(command);
+
+    public AuxInputStatusCommand() {
+        super("01 1E");
     }
 
+    boolean PTOstatus=false;
     @Override
     protected void performCalculations() {
-
+        PTOstatus = (buffer.get(2) & 128)>0;
     }
 
     @Override
@@ -23,7 +25,7 @@ public class AuxInputStatusCommand extends ObdCommand {
 
     @Override
     public String getCalculatedResult() {
-        return null;
+        return Boolean.toString(PTOstatus);
     }
 
     @Override
