@@ -119,4 +119,14 @@ public class DbHandler {
         }
         return null;
     }
+
+    public static List<ObdEntry> getTripData(int t)
+    {
+        try {
+            return new ArrayList<ObdEntry>(tripDao.queryForId(t).getObdEntries());
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        return null;
+    }
 }

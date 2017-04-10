@@ -8,6 +8,7 @@ import android.widget.TextView;
 
 import obdtool.com.obd2_2.Fragment.TripFragment;
 import obdtool.com.obd2_2.R;
+import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.db.Model.Trip;
 
 import java.util.List;
@@ -38,6 +39,8 @@ public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecycl
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
                 if (null != mListener) {
                     // Notify the active callbacks interface (the activity, if the
                     // fragment is attached to one) that an item has been selected.
@@ -45,6 +48,7 @@ public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecycl
                 }
             }
         });
+
     }
 
     @Override

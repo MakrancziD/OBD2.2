@@ -49,4 +49,12 @@ public class ObdEntry {
         this.formatted_data = calcData;
         this.trip_ID = t;
     }
+
+    public String getRequest() {
+        return request;
+    }
+
+    public String getFormatted_data() {
+        return formatted_data;
+    }
 }

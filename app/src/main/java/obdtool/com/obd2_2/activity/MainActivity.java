@@ -36,6 +36,7 @@ import obdtool.com.obd2_2.Fragment.ConnectionFragment;
 import obdtool.com.obd2_2.Fragment.DiagnosticFragment;
 import obdtool.com.obd2_2.Fragment.LiveFragment;
 import obdtool.com.obd2_2.Fragment.TerminalFragment;
+import obdtool.com.obd2_2.Fragment.TripDetailsFragment;
 import obdtool.com.obd2_2.Fragment.TripFragment;
 import obdtool.com.obd2_2.Fragment.VehicleFragment;
 import obdtool.com.obd2_2.R;
@@ -149,6 +150,16 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
                 break;
         }
 
+        applyFragment();
+    }
+
+    private void displayTripDetails(int tripId) {
+        currentFragment = TripDetailsFragment.newInstance(tripId);
+        applyFragment();
+    }
+
+    private void applyFragment()
+    {
         if(currentFragment!=null) {
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.nav_content, (Fragment)currentFragment);
