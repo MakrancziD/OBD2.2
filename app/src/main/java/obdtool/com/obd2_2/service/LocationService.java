@@ -18,6 +18,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import obdtool.com.obd2_2.db.DbHandler;
+
 /**
  * Created by Maki on 2017. 03. 31..
  */
@@ -38,6 +40,9 @@ public class LocationService extends Service implements LocationListener {
     private static final long MIN_TIME_BW_UPDATES = 1000;
 
     protected LocationManager locationManager;
+    private Context context;
+
+    private boolean isRunning=false;
 
     public LocationService(Context context) {
         this.mContext = context;
@@ -115,7 +120,11 @@ public class LocationService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        //TODO: update UI, store in DB
+        DbHandler.storeSensorEntry(location);
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     @Override
@@ -133,10 +142,19 @@ public class LocationService extends Service implements LocationListener {
 
     }
 
+    public boolean isRunning() {
+        return isRunning;
+    }
+
     public class LocationServiceBinder extends Binder {
         public LocationService getService()
         {
             return LocationService.this;
         }
+    }
+
+    public void stopService()
+    {
+
     }
 }

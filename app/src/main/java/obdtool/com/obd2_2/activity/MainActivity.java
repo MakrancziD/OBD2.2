@@ -42,6 +42,7 @@ import obdtool.com.obd2_2.Fragment.VehicleFragment;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.Trip;
+import obdtool.com.obd2_2.service.LocationService;
 import obdtool.com.obd2_2.service.ObdService;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.CustomObdCommand;
@@ -69,8 +70,10 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
     private static final int REQUEST_ENABLE_BT = 1111;
     private static final String COMP = MainActivity.class.getName();
     public Enum.connectionState state = Enum.connectionState.DISCONNECTED;
-    private boolean isServiceBound;
-    private ObdService service;
+    private boolean isObdServiceBound;
+    private boolean isLocationServiceBound;
+    private ObdService obdService;
+    private LocationService locationService;
     private BluetoothDevice btDevice=null;
     private ReceiverFragment currentFragment;
     private Context context;
@@ -120,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
 //            }
 //        });
 
-        doBindService();
+        doBindObdService();
         DbHandler.initDb(context);
 
 
@@ -219,7 +222,7 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
             public void onClick(DialogInterface dialog, int which) {
 
                 int position = ((AlertDialog) dialog).getListView().getCheckedItemPosition(); //isn't it the which parameter??
-                service.startService(pairedDevices.get(position));
+                obdService.startService(pairedDevices.get(position));
                 dialog.dismiss();
 
             }
@@ -249,12 +252,12 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
         return true;
     }
 
-    private void doBindService() {
-        if (!isServiceBound) {
-            Log.d(COMP, "Binding OBD service..");
+    private void doBindObdService() {
+        if (!isObdServiceBound) {
+            Log.d(COMP, "Binding OBD obdService..");
             updateState(Enum.connectionState.INIT_OBD);
             Intent serviceIntent = new Intent(this, ObdService.class);
-            if(bindService(serviceIntent, serviceConn, Context.BIND_AUTO_CREATE))
+            if(bindService(serviceIntent, obdServiceConn, Context.BIND_AUTO_CREATE))
             {
                 Log.d(COMP, "bound true");
             }
@@ -262,23 +265,26 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
         }
     }
 
-    private ServiceConnection serviceConn = new ServiceConnection() {
+    private void doBindLocationService() {
+        if(!isLocationServiceBound) {
+            Log.d(COMP, "Binding location service..");
+            Intent locationServiceIntent = new Intent(this, LocationService.class);
+            if(bindService(locationServiceIntent, locationServiceConnection, Context.BIND_AUTO_CREATE))
+            {
+                Log.d(COMP, "location service bound true");
+            }
+            else {Log.d(COMP, "location service bound false");}
+        }
+    }
+
+    private ServiceConnection obdServiceConn = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName className, IBinder binder) {
-            Log.d(COMP, className.toString() + " service is bound");
-            isServiceBound = true;
-            service = ((ObdService.ObdServiceBinder) binder).getService();
-            service.setContext(MainActivity.this);
-            //btnBt.setEnabled(true);
+            Log.d(COMP, className.toString() + " obdService is bound");
+            isObdServiceBound = true;
+            obdService = ((ObdService.ObdServiceBinder) binder).getService();
+            obdService.setContext(MainActivity.this);
             displayView(R.id.action_connection);
-//            Log.d(COMP, "Starting live data");
-//            try {
-//                service.startService();
-//            } catch (IOException ioe) {
-//                Log.e(COMP, "Failure Starting live data");
-//                updateState(Enums.connectionState.BT_ERROR);
-//                doUnbindService();
-//            }
         }
 
         @Override
@@ -288,23 +294,48 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
 
         @Override
         public void onServiceDisconnected(ComponentName className) {
-            Log.d(COMP, className.toString() + " service is unbound");
-            isServiceBound = false;
+            Log.d(COMP, className.toString() + " obdService is unbound");
+            isObdServiceBound = false;
         }
     };
 
-    private void doUnbindService() {
-        if (isServiceBound) {
-            if (service.isRunning()) {
-                service.stopService();
+    private ServiceConnection locationServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(COMP, name.toString()+ " locationService is bound");
+            isLocationServiceBound = true;
+            locationService = ((LocationService.LocationServiceBinder) service).getService();
+            locationService.setContext(MainActivity.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(COMP, name.toString() + " locationService is unbound");
+            isLocationServiceBound = false;
+        }
+    };
+
+    private void doUnbindObdService() {
+        if (isObdServiceBound) {
+            if (obdService.isRunning()) {
+                obdService.stopService();
             }
-            Log.d(COMP, "Unbinding OBD service..");
-            unbindService(serviceConn);
-            isServiceBound = false;
+            Log.d(COMP, "Unbinding OBD obdService..");
+            unbindService(obdServiceConn);
+            isObdServiceBound = false;
         }
     }
 
-
+    private void doUnbindLocationService() {
+        if (isLocationServiceBound) {
+            if (locationService.isRunning()) {
+                locationService.stopService();
+            }
+            Log.d(COMP, "Unbinding location Service..");
+            unbindService(locationServiceConnection);
+            isLocationServiceBound = false;
+        }
+    }
 
 //    private class LoadBtSocketAsync extends AsyncTask<String, String, String>
 //    {
@@ -344,20 +375,20 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
     public String ObdCommand(String command)
     {
         ObdCommandJob job = new ObdCommandJob(new CustomObdCommand(command));
-        job = service.executeCommand(job);
+        job = obdService.executeCommand(job);
         return job.getCommand().getResult();
     }
 
     public ObdCommand ObdCommand(ObdCommand command)
     {
         ObdCommandJob job = new ObdCommandJob(command);
-        job = service.executeCommand(job);
+        job = obdService.executeCommand(job);
         return job.getCommand();
     }
 
     public String ObdRawCommand(String command)
     {
-        BluetoothSocket socket = service.getBtSocket();
+        BluetoothSocket socket = obdService.getBtSocket();
         ObdCommand job = new CustomObdCommand(command);
         try {
             job.run(socket.getInputStream(), socket.getOutputStream());
@@ -371,12 +402,12 @@ public class MainActivity extends AppCompatActivity implements TerminalFragment.
 
     public void enableQueue(boolean q)
     {
-        service.setQueuingEnabled(q);
+        obdService.setQueuingEnabled(q);
     }
 
     public void initLiveCommands(List<ObdCommand> cmdList)
     {
-        service.setLiveCommands(cmdList);
+        obdService.setLiveCommands(cmdList);
     }
 
     public void updateLive(ObdCommand cmd)

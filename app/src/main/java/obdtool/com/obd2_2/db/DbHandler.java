@@ -1,6 +1,7 @@
 package obdtool.com.obd2_2.db;
 
 import android.content.Context;
+import android.location.Location;
 import android.util.Log;
 
 import com.github.pires.obd.commands.ObdCommand;
@@ -128,5 +129,15 @@ public class DbHandler {
             Log.e(COMP, e.getMessage());
         }
         return null;
+    }
+
+    public static void storeGpsEntry(Location entry)
+    {
+        SensorEntry sEntry = new SensorEntry();
+        try {
+            sensorDao.create(entry);
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
     }
 }
