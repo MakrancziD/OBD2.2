@@ -5,6 +5,7 @@ import android.location.Location;
 import android.util.Log;
 
 import com.github.pires.obd.commands.ObdCommand;
+import com.github.pires.obd.commands.pressure.IntakeManifoldPressureCommand;
 import com.j256.ormlite.dao.Dao;
 
 import java.sql.SQLException;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import obdtool.com.obd2_2.db.Model.Acceleration;
 import obdtool.com.obd2_2.db.Model.ObdEntry;
 import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
@@ -27,6 +29,7 @@ public class DbHandler {
     private static Dao<Trip, Integer> tripDao;
     private static Dao<ObdEntry, Integer> obdDao;
     private static Dao<SensorEntry, Integer> sensorDao;
+    private static Dao<Acceleration, Integer> accelerationDao;
 
     private static Vehicle currentVehicle;
     private static Trip currentTrip;
@@ -134,8 +137,17 @@ public class DbHandler {
     public static void storeGpsEntry(Location entry)
     {
         SensorEntry sEntry = new SensorEntry();
+//        try {
+//            sensorDao.create(entry);
+//        } catch (SQLException e) {
+//            Log.e(COMP, e.getMessage());
+//        }
+    }
+
+    public static void storeAccelResult(Acceleration acc)
+    {
         try {
-            sensorDao.create(entry);
+            accelerationDao.create(acc);
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
         }

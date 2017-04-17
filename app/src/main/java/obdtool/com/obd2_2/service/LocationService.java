@@ -120,7 +120,7 @@ public class LocationService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        DbHandler.storeSensorEntry(location);
+        //DbHandler.storeSensorEntry(location);
     }
 
     public void setContext(Context context) {
