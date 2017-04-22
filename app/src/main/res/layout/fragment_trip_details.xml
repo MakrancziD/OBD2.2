@@ -1,13 +1,45 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="obdtool.com.obd2_2.Fragment.TripDetailsFragment">
-
-    <TextView
-        android:id="@+id/data"
+    <TableLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content">
 
-</FrameLayout>
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <com.jjoe64.graphview.GraphView
+            android:id="@+id/tripGraph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <LinearLayout
+            android:id="@+id/checkbox_view"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <com.google.android.gms.maps.MapView
+                android:id="@+id/tripMap"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:apiKey="@string/maps_api_key">
+
+            </com.google.android.gms.maps.MapView>
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+        </LinearLayout>
+
+
+
+    </TableLayout>
+
+
+
+</ScrollView>

@@ -1,5 +1,8 @@
 package obdtool.com.obd2_2.service;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Context;
@@ -8,6 +11,7 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.github.pires.obd.commands.ObdCommand;
@@ -23,7 +27,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
+import obdtool.com.obd2_2.activity.MainActivityOld;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.ObdCommandJob;
@@ -36,6 +42,7 @@ public class ObdService extends GatewayService {
 
     private BluetoothSocket btSocket = null;
     private static final String COMP = ObdService.class.getName();
+    public static final int NOTIFICATION_ID = 1;
 
     private boolean isRunning=false;
     private boolean queuingEnabled = false;
@@ -60,6 +67,7 @@ public class ObdService extends GatewayService {
     };
 
     public void startService(BluetoothDevice btDevice) {
+        showNotification("Disconnected", "No bt device connected", R.drawable.ic_dashboard, true, true, true);
         Log.d(COMP, "Connecting to Bluetooth device...");
         try {
             if(getBtSocket() !=null)
@@ -93,8 +101,10 @@ public class ObdService extends GatewayService {
             stopService();
         }
 
-        initObd();
-
+        if(btSocket.isConnected()) {
+            showNotification("Bluetooth device Connected", btDevice.getName(), R.drawable.ic_dashboard, true, true, true);
+            initObd();
+        }
     }
 
     private void switchDevice(BluetoothDevice btDevice)
@@ -130,7 +140,7 @@ public class ObdService extends GatewayService {
 
         Log.d(COMP, "OBD initialization completed");
         isRunning = true;
-
+        showNotification("OBD Service running", "You can use the application", R.drawable.ic_dashboard, true, true, true);
     }
 
 
@@ -154,10 +164,10 @@ public class ObdService extends GatewayService {
 
             if (job != null) {
                 final ObdCommandJob job2 = job;
-                ((MainActivity) context).runOnUiThread(new Runnable() {
+                ((MainActivityOld) context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((MainActivity) context).updateLive(job2.getCommand());
+                        ((MainActivityOld) context).updateLive(job2.getCommand());
                     }
                 });
             }
@@ -250,6 +260,27 @@ public class ObdService extends GatewayService {
         public ObdService getService()
         {
             return ObdService.this;
+        }
+    }
+
+    protected void showNotification(String contentTitle, String contentText, int icon, boolean ongoing, boolean notify, boolean vibrate) {
+        final PendingIntent contentIntent = PendingIntent.getActivity(context, 0, new Intent(context, MainActivity.class), 0);
+        final NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(context);
+        notificationBuilder.setContentTitle(contentTitle)
+                .setContentText(contentText).setSmallIcon(icon)
+                .setContentIntent(contentIntent)
+                .setWhen(System.currentTimeMillis());
+        // can cancel?
+        if (ongoing) {
+            notificationBuilder.setOngoing(true);
+        } else {
+            notificationBuilder.setAutoCancel(true);
+        }
+        if (vibrate) {
+            notificationBuilder.setDefaults(Notification.DEFAULT_VIBRATE);
+        }
+        if (notify) {
+            notificationManager.notify(NOTIFICATION_ID, notificationBuilder.getNotification());
         }
     }
 }

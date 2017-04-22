@@ -1,6 +1,5 @@
 package obdtool.com.obd2_2.Fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -24,7 +23,7 @@ import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
 
-public class VehicleFragment extends Fragment implements ReceiverFragment {
+public class VehicleInfoFragment extends Fragment implements ReceiverFragment {
 
     private OnFragmentInteractionListener mListener;
     private Button supportBtn;
@@ -34,7 +33,7 @@ public class VehicleFragment extends Fragment implements ReceiverFragment {
     private List<String> items = new ArrayList<>();
     private ArrayAdapter<String> itemsAdapter = null;
 
-    public VehicleFragment() {
+    public VehicleInfoFragment() {
         // Required empty public constructor
     }
 
@@ -48,7 +47,7 @@ public class VehicleFragment extends Fragment implements ReceiverFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_vehicle, container, false);
+        View v = inflater.inflate(R.layout.fragment_vehicle_info, container, false);
         supportList = (ListView) v.findViewById(R.id.supportedList);
         supportBtn = (Button)v.findViewById(R.id.btnPIDsupport);
 

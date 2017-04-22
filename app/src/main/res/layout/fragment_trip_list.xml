@@ -10,4 +10,4 @@
     android:layout_marginRight="16dp"
     app:layoutManager="LinearLayoutManager"
     tools:context="obdtool.com.obd2_2.Fragment.TripFragment"
-    tools:listitem="@layout/fragment_trip" />
+    tools:listitem="@layout/list_item_trip" />

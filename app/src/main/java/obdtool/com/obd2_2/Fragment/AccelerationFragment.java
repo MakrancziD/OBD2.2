@@ -1,10 +1,12 @@
 package obdtool.com.obd2_2.Fragment;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,7 +49,9 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
     final int MSG_UPDATE_TIMER = 3;
 
     Stopwatch timer = new Stopwatch();
-    final int REFRESH_RATE = 100;
+    private int REFRESH_RATE;
+
+    private SharedPreferences sharedPreferences;
 
     private List<ObdCommand> cmdList = new ArrayList<>();
     private boolean isRecording = false;
@@ -64,6 +68,8 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
 
         parentActivity=(MainActivity) getActivity();
         cmdList.add(new SpeedCommand());
+        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        REFRESH_RATE = sharedPreferences.getInt("sensor_rate", 100);
     }
 
     @Override

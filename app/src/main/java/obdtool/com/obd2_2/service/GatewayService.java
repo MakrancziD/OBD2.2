@@ -21,7 +21,7 @@ import obdtool.com.obd2_2.util.ObdCommandJob;
 public abstract class GatewayService extends Service {
 
     private final IBinder binder = new ObdService.GatewayServiceBinder();
-    private NotificationManager notificationManager;
+    protected NotificationManager notificationManager;
     private static final String COMP = GatewayService.class.getName();
 
     protected BlockingQueue<ObdCommandJob> queue = new LinkedBlockingQueue<>();
@@ -42,6 +42,7 @@ public abstract class GatewayService extends Service {
         super.onCreate();
         t.start();
         Log.d(COMP, "Service created.");
+        notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
     }
 
     @Override

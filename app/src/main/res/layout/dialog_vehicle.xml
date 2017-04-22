@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="300dp"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/txt_veh_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vehicle_name"/>
+
+        <EditText
+            android:id="@+id/edit_veh_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/name"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/txt_veh_make"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vehicle_make"/>
+
+        <EditText
+            android:id="@+id/edit_veh_make"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/make"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp">
+
+        <TextView
+            android:id="@+id/txt_veh_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/vehicle_model"/>
+
+        <EditText
+            android:id="@+id/edit_veh_model"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/model"/>
+
+    </LinearLayout>
+
+    <Button
+        android:layout_gravity="center"
+        android:id="@+id/btn_create"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/create"/>
+
+</LinearLayout>

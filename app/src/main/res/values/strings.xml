@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">OBD2_2</string>
+    <string name="app_name">OBD2Tool</string>
     <string name="bt_init">Init Bluetooth</string>
     <string name="veh_init">Select vehicle</string>
     <string name="label_RPM">RPM</string>
@@ -42,6 +42,39 @@
     <string name="start">Start</string>
     <string name="from">From</string>
     <string name="range">Range</string>
+    <string name="connection">Connection</string>
+    <string name="defaultBtDev">Default Bluetooth device</string>
+    <string name="defaultVeh">Default Vehicle</string>
+    <string name="timings">Timings</string>
+    <string name="obdRate">OBD live queuing rate</string>
+    <string name="tab_prefs">Preferences</string>
+    <string name="sensorRate">Sensor update rate</string>
+    <string name="dashboard">Dashboard</string>
+    <string name="trips">Trips</string>
+    <string name="diagnostic">Diagnostic</string>
+    <string name="acceleration">Acceleration</string>
+    <string name="terminal">Terminal</string>
+    <string name="preferences">Preferences</string>
+    <string name="title_activity_main2">Main2Activity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="app_desc">OBDII Diagnostic tool and data collector</string>
+    <string name="vehicles">Vehicles</string>
+    <string name="vehicle_name">Vehicle name:</string>
+    <string name="name">Name</string>
+    <string name="vehicle_make">Vehicle make:</string>
+    <string name="make">Make</string>
+    <string name="vehicle_model">Vehicle model:</string>
+    <string name="model">Model</string>
+    <string name="new_vehicle">New Vehicle</string>
+    <string name="create">Create</string>
+    <string name="delete_veh">Delete vehicle</string>
+    <string name="delete_confirm_message">Do you really want to delete</string>
+
+    <string name="maps_api_key">AIzaSyBvbUu2UXdVaUWTLygRQHAUl8li07WIpHc</string>
 
 
 </resources>

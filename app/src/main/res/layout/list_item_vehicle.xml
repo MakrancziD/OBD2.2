@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/veh_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:text="1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:layout_margin="10dp"
+        />
+
+    <TextView
+        android:id="@+id/veh_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MyVehicle"
+        android:layout_toEndOf="@id/veh_id"
+        android:layout_margin="5dp"
+        android:textAppearance="?attr/textAppearanceListItem"/>
+
+    <TextView
+        android:id="@+id/veh_make"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Make Model"
+        android:layout_toEndOf="@id/veh_id"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_below="@id/veh_name"/>
+
+    <ImageButton
+        android:id="@+id/btnDelete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_margin="5dp"
+        android:background="@drawable/ic_delete_black"
+        />
+
+    <ImageButton
+        android:id="@+id/btnEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toStartOf="@id/btnDelete"
+        android:layout_margin="5dp"
+        android:background="@drawable/ic_edit_black"/>
+
+</RelativeLayout>

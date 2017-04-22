@@ -12,14 +12,6 @@
         android:layout_alignParentStart="true"
         android:id="@+id/btnBluetooth" />
 
-    <Button
-        android:text="@string/veh_init"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/btnVehicle" />
-
     <TextView
         android:text="TextView"
         android:layout_width="wrap_content"
@@ -28,5 +20,14 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="14dp"
         android:id="@+id/connectionStatus" />
+
+    <Spinner
+        android:id="@+id/veh_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/btnBluetooth"
+        android:layout_marginTop="19dp" />
+
 
 </RelativeLayout>

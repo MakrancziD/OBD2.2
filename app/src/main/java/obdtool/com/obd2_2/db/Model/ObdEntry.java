@@ -34,14 +34,14 @@ public class ObdEntry {
     private String response;
 
     @DatabaseField(columnName = FIELD_NAME_FORMATTED_DATA)
-    private String formatted_data;
+    private double formatted_data;
 
     @DatabaseField(columnName = FIELD_NAME_TRIP_ID, foreign = true, foreignAutoRefresh = true)
     private Trip trip_ID;
 
     public ObdEntry() {}
 
-    public ObdEntry(Date timestamp, String req, String resp, String calcData, Trip t)
+    public ObdEntry(Date timestamp, String req, String resp, double calcData, Trip t)
     {
         this.timestamp = timestamp;
         this.request = req;
@@ -54,7 +54,11 @@ public class ObdEntry {
         return request;
     }
 
-    public String getFormatted_data() {
+    public double getFormatted_data() {
         return formatted_data;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
     }
 }

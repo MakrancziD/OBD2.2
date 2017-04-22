@@ -8,9 +8,9 @@ import android.widget.TextView;
 
 import obdtool.com.obd2_2.Fragment.TripFragment;
 import obdtool.com.obd2_2.R;
-import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.db.Model.Trip;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecyclerViewAdapter.ViewHolder> {
@@ -19,14 +19,19 @@ public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecycl
     private final TripFragment.OnListFragmentInteractionListener mListener;
 
     public MyTripRecyclerViewAdapter(List<Trip> items, TripFragment.OnListFragmentInteractionListener listener) {
-        mValues = items;
+        if(items!=null) {
+            mValues = items;
+        }
+        else {
+            mValues = new ArrayList<>();
+        }
         mListener = listener;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fragment_trip_list, parent, false);
+                .inflate(R.layout.list_item_trip, parent, false);
         return new ViewHolder(view);
     }
 

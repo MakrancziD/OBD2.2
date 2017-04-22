@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory android:title="@string/connection">
+
+        <ListPreference
+            android:defaultValue="1"
+            android:title="@string/defaultBtDev"
+            android:key="list_preference_bt" />
+        <ListPreference
+            android:defaultValue="1"
+            android:title="@string/defaultVeh"
+            android:key="list_preference_veh" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/timings">
+        <!--<obdtool.com.obd2_2.util.NumberPickerPreference-->
+            <!--android:title="@string/obdRate"-->
+            <!--android:key="obd_rate" />-->
+        <!--<obdtool.com.obd2_2.util.NumberPickerPreference-->
+            <!--android:title="@string/sensorRate"-->
+            <!--android:key="sensor_rate" />-->
+    </PreferenceCategory>
+</PreferenceScreen>

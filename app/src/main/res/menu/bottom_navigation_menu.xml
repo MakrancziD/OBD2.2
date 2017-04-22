@@ -23,9 +23,14 @@
         <!--android:icon="@android:drawable/ic_dialog_info"-->
         <!--android:title="@string/tab_vehicle_info"/>-->
 
+    <!--<item-->
+        <!--android:id="@+id/action_trip"-->
+        <!--android:icon="@android:drawable/ic_dialog_info"-->
+        <!--android:title="@string/tab_trip"/>-->
+
     <item
-        android:id="@+id/action_trip"
+        android:id="@+id/action_prefs"
         android:icon="@android:drawable/ic_dialog_info"
-        android:title="@string/tab_trip"/>
+        android:title="@string/tab_prefs"/>
 
 </menu>
