@@ -117,11 +117,12 @@ public class MainActivity extends AppCompatActivity
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         DbHandler.initDb(context);
         DbHandler.setCurrentVehicle(sharedPreferences.getString("list_preference_veh", "default"));
+        UpdateBtDevList();
         doBindObdService();
         doBindLocationService();
         doBindSensorService();
         CheckBluetoothAdapter();
-        UpdateBtDevList();
+
 
         //DEBUG
         List<ObdEntry> obdE = DbHandler.getAllObdEntries();
@@ -130,15 +131,13 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void TryConnectDefaultBtDevice() {
-        String btJson = sharedPreferences.getString("list_preference_bt","");
-        BluetoothDevice defaultDevice = gson.fromJson(btJson, BluetoothDevice.class);
-        if(btJson.equals("") /*|| !obdService.startService(defaultDevice)*/) {
-            SelectBtDevice();
-        }
-        else
-        {
-            obdService.startService(defaultDevice);
-        }
+//        String btJson = sharedPreferences.getString("list_preference_bt","");
+//        BluetoothDevice defaultDevice = gson.fromJson(btJson, BluetoothDevice.class);
+//        if (btJson.equals("") /*|| !obdService.startService(defaultDevice)*/) {
+//            SelectBtDevice();
+//        } else {
+//            obdService.startService(defaultDevice);
+//        }
     }
 
     @Override
