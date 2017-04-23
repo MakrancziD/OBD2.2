@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.hardware.SensorEvent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
@@ -201,6 +202,16 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
 
     @Override
     public void update(ObdCommand cmd) {
+
+    }
+
+    @Override
+    public void update(Location l) {
+
+    }
+
+    @Override
+    public void update(SensorEvent e) {
 
     }
 

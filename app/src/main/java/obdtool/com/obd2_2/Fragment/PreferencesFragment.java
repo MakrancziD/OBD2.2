@@ -3,6 +3,8 @@ package obdtool.com.obd2_2.Fragment;
 import android.bluetooth.BluetoothDevice;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.SensorEvent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -94,6 +96,16 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements Rec
 
     }
 
+    @Override
+    public void update(Location l) {
+
+    }
+
+    @Override
+    public void update(SensorEvent e) {
+
+    }
+
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
@@ -126,7 +138,7 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements Rec
         int i = 0;
         for(Vehicle vehicle : vehicleList)
         {
-            entries[i] = i+". "+vehicle.getName();
+            entries[i] = Integer.toString(vehicle.getID_vehicle());
             entryValues[i] = vehicle.toString();
             i++;
         }

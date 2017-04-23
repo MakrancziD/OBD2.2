@@ -42,7 +42,7 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
         holder.mItem = mValues.get(position);
-        holder.mIdView.setText(mValues.get(position).getID_vehicle());
+        holder.mIdView.setText(Integer.toString(mValues.get(position).getID_vehicle()));
         holder.mNameView.setText(mValues.get(position).getName());
         holder.mMakeModelView.setText(mValues.get(position).getMakeModel());
 
@@ -65,6 +65,7 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                 final Dialog editDialog = new Dialog(context);
                 editDialog.setContentView(R.layout.dialog_vehicle);
                 editDialog.setTitle(R.string.new_vehicle);
+
 
                 final EditText edit_name = (EditText) editDialog.findViewById(R.id.edit_veh_name);
                 final EditText edit_make = (EditText) editDialog.findViewById(R.id.edit_veh_make);

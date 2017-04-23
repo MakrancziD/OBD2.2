@@ -21,7 +21,7 @@ import obdtool.com.obd2_2.db.Model.Vehicle;
 public class DbHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME    = "ormlite.db";
-    private static final int    DATABASE_VERSION = 2;
+    private static final int    DATABASE_VERSION = 3;
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

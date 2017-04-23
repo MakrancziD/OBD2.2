@@ -23,6 +23,16 @@
             android:exported="false"
             android:launchMode="singleInstance" />
 
+        <service
+            android:name=".service.LocationService"
+            android:exported="false"
+            android:launchMode="singleInstance" />
+
+        <service
+            android:name=".service.SensorService"
+            android:exported="false"
+            android:launchMode="singleInstance" />
+
         <activity
             android:name=".activity.MainActivity"
             android:label="@string/title_activity_main2"

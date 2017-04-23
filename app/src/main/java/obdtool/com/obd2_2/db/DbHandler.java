@@ -1,7 +1,9 @@
 package obdtool.com.obd2_2.db;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.location.Location;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.github.pires.obd.commands.ObdCommand;
@@ -138,12 +140,12 @@ public class DbHandler {
 
     public static void storeGpsEntry(Location entry)
     {
-        //SensorEntry sEntry = new SensorEntry();
-//        try {
-//            sensorDao.create(entry);
-//        } catch (SQLException e) {
-//            Log.e(COMP, e.getMessage());
-//        }
+        SensorEntry sEntry = new SensorEntry("GPS", new Date(entry.getTime()), entry.getLatitude(), entry.getLongitude(), entry.getAltitude(), entry.getSpeed(), currentTrip);
+        try {
+            sensorDao.create(sEntry);
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
     }
 
     public static void storeAccelResult(Acceleration acc)
@@ -155,10 +157,11 @@ public class DbHandler {
         }
     }
 
-    public static void storeSensorResult(SensorEntry entry)
+    public static void storeSensorResult(String type, Date timestasmp, double x, double y, double z, double zz)
     {
+        SensorEntry sEntry = new SensorEntry(type, timestasmp, x, y, z, zz, currentTrip);
         try {
-            sensorDao.create(entry);
+            sensorDao.create(sEntry);
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
         }
@@ -193,6 +196,16 @@ public class DbHandler {
         DbHandler.currentVehicle = currentVehicle;
     }
 
+    public static void setCurrentVehicle(String vehId) {
+        try {
+            Vehicle v = vehicleDao.queryForId(Integer.parseInt(vehId));
+            DbHandler.currentVehicle = v;
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        int i = 1;
+    }
+
     public static void addVehicle(Vehicle v) {
         try {
             vehicleDao.create(v);
@@ -215,5 +228,22 @@ public class DbHandler {
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
         }
+    }
+
+    public static List<ObdEntry> getAllObdEntries() {
+        try {
+            return obdDao.queryForAll();
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        return null;
+    }
+    public static List<SensorEntry> getAllSensorEntries() {
+        try {
+            return sensorDao.queryForAll();
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        return null;
     }
 }

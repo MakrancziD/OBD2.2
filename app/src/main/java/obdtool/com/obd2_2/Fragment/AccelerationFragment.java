@@ -2,6 +2,8 @@ package obdtool.com.obd2_2.Fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.hardware.SensorEvent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -155,6 +157,16 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
                 mHandler.sendEmptyMessage(MSG_STOP_TIMER_UNSUCCESSFUL);
             }
         }
+    }
+
+    @Override
+    public void update(Location l) {
+
+    }
+
+    @Override
+    public void update(SensorEvent e) {
+
     }
 
     public interface OnFragmentInteractionListener {

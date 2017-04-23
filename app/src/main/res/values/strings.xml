@@ -75,6 +75,12 @@
     <string name="delete_confirm_message">Do you really want to delete</string>
 
     <string name="maps_api_key">AIzaSyBvbUu2UXdVaUWTLygRQHAUl8li07WIpHc</string>
+    <string name="x">X:</string>
+    <string name="y">X:</string>
+    <string name="z">Z:</string>
+    <string name="lat">Latitude:</string>
+    <string name="lon">Longitude:</string>
+    <string name="alt">Altitude:</string>
 
 
 </resources>

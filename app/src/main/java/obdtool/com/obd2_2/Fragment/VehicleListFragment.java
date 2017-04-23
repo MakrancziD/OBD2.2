@@ -2,6 +2,8 @@ package obdtool.com.obd2_2.Fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.hardware.SensorEvent;
+import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -141,6 +143,16 @@ public class VehicleListFragment extends Fragment implements ReceiverFragment {
 
     @Override
     public void update(ObdCommand cmd) {
+
+    }
+
+    @Override
+    public void update(Location l) {
+
+    }
+
+    @Override
+    public void update(SensorEvent e) {
 
     }
 

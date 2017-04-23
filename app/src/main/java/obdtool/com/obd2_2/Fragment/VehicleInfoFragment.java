@@ -1,6 +1,8 @@
 package obdtool.com.obd2_2.Fragment;
 
 import android.content.Context;
+import android.hardware.SensorEvent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -97,6 +99,16 @@ public class VehicleInfoFragment extends Fragment implements ReceiverFragment {
 
     @Override
     public void update(ObdCommand cmd) {
+
+    }
+
+    @Override
+    public void update(Location l) {
+
+    }
+
+    @Override
+    public void update(SensorEvent e) {
 
     }
 

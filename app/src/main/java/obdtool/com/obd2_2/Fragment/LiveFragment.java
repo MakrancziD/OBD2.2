@@ -1,6 +1,8 @@
 package obdtool.com.obd2_2.Fragment;
 
 import android.content.Context;
+import android.hardware.SensorEvent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,6 +23,7 @@ import Commands.PID.SpeedCommand;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.db.DbHandler;
+import obdtool.com.obd2_2.service.LocationService;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
 public class LiveFragment extends Fragment implements ReceiverFragment {
@@ -31,6 +34,13 @@ public class LiveFragment extends Fragment implements ReceiverFragment {
     private TextView tvSpeed;
     private TextView tvCoolant;
     private Button btnStartStop;
+    private TextView tvAccX;
+    private TextView tvAccY;
+    private TextView tvAccZ;
+    private TextView tvGpsLat;
+    private TextView tvGpsLon;
+    private TextView tvGpsAlt;
+    private TextView tvGpsSpd;
 
     private boolean liveRecording = false;
 
@@ -62,6 +72,15 @@ public class LiveFragment extends Fragment implements ReceiverFragment {
         tvSpeed=(TextView) view.findViewById(R.id.value_Speed);
         tvCoolant=(TextView) view.findViewById(R.id.value_coolant);
 
+        tvAccX = (TextView)view.findViewById(R.id.value_acc_x);
+        tvAccY = (TextView)view.findViewById(R.id.value_acc_y);
+        tvAccZ = (TextView)view.findViewById(R.id.value_acc_z);
+
+        tvGpsLat = (TextView)view.findViewById(R.id.value_gps_lat);
+        tvGpsLon = (TextView)view.findViewById(R.id.value_gps_lon);
+        tvGpsAlt = (TextView)view.findViewById(R.id.value_gps_alt);
+        tvGpsSpd = (TextView)view.findViewById(R.id.value_gps_spd);
+
         btnStartStop = (Button) view.findViewById(R.id.btnStartStop);
         btnStartStop.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,15 +103,20 @@ public class LiveFragment extends Fragment implements ReceiverFragment {
 
     private void startRecording()
     {
+
         parentActivity.initLiveCommands(cmdList);
         DbHandler.startTrip();
         parentActivity.enableQueue(true);
+        parentActivity.enableLocation(true);
+        parentActivity.enableSensor(true);
         this.liveRecording=true;
     }
 
     private void stopRecording()
     {
         parentActivity.enableQueue(false);
+        parentActivity.enableLocation(false);
+        parentActivity.enableSensor(false);
         DbHandler.endTrip();
         this.liveRecording=false;
     }
@@ -112,6 +136,21 @@ public class LiveFragment extends Fragment implements ReceiverFragment {
                 tvCoolant.setText(cmd.getCalculatedResult());
                 break;
         }
+    }
+
+    public void update(Location l)
+    {
+        tvGpsLat.setText(Double.toString(l.getLatitude()));
+        tvGpsLon.setText(Double.toString(l.getLongitude()));
+        tvGpsAlt.setText(Double.toString(l.getAltitude()));
+        tvGpsSpd.setText(Double.toString(l.getSpeed()));
+    }
+
+    public void update (SensorEvent s)
+    {
+        tvAccX.setText(Float.toString(s.values[0]));
+        tvAccY.setText(Float.toString(s.values[1]));
+        tvAccZ.setText(Float.toString(s.values[2]));
     }
 
     // TODO: Rename method, update argument and hook method into UI event

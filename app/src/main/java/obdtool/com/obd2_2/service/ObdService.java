@@ -164,10 +164,10 @@ public class ObdService extends GatewayService {
 
             if (job != null) {
                 final ObdCommandJob job2 = job;
-                ((MainActivityOld) context).runOnUiThread(new Runnable() {
+                ((MainActivity) context).runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((MainActivityOld) context).updateLive(job2.getCommand());
+                        ((MainActivity) context).updateLive(job2.getCommand());
                     }
                 });
             }

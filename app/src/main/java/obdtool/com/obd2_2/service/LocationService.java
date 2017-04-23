@@ -18,6 +18,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
+import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.db.DbHandler;
 
 /**
@@ -26,7 +27,7 @@ import obdtool.com.obd2_2.db.DbHandler;
 
 public class LocationService extends Service implements LocationListener {
 
-    private final Context mContext;
+    private Context mContext;
 
     boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
@@ -49,7 +50,9 @@ public class LocationService extends Service implements LocationListener {
         getLocation();
     }
 
-    private Location getLocation() {
+    public LocationService(){}
+
+    public Location getLocation() {
         try {
             if (Build.VERSION.SDK_INT >= 23 &&
                     ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
@@ -119,8 +122,17 @@ public class LocationService extends Service implements LocationListener {
     }
 
     @Override
-    public void onLocationChanged(Location location) {
-        //DbHandler.storeSensorEntry(location);
+    public void onLocationChanged(final Location location) {
+        if(isRunning) {
+            DbHandler.storeGpsEntry(location);
+
+            ((MainActivity) context).runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    ((MainActivity) context).updateLive(location);
+                }
+            });
+        }
     }
 
     public void setContext(Context context) {
@@ -144,6 +156,10 @@ public class LocationService extends Service implements LocationListener {
 
     public boolean isRunning() {
         return isRunning;
+    }
+
+    public void enableLocation(boolean b) {
+        isRunning=b;
     }
 
     public class LocationServiceBinder extends Binder {

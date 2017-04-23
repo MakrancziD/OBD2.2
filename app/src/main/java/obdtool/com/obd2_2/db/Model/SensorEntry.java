@@ -18,6 +18,7 @@ public class SensorEntry {
     public static final String FIELD_NAME_DATA_1 = "data1";
     public static final String FIELD_NAME_DATA_2 = "data2";
     public static final String FIELD_NAME_DATA_3 = "data3";
+    public static final String FIELD_NAME_DATA_4 = "data4";
     public static final String FIELD_NAME_TRIP = "trip_ID";
 
     @DatabaseField(columnName = FIELD_NAME_ID)
@@ -38,16 +39,20 @@ public class SensorEntry {
     @DatabaseField(columnName = FIELD_NAME_DATA_3)
     private double data3;
 
+    @DatabaseField(columnName = FIELD_NAME_DATA_4)
+    private double data4;
+
     @DatabaseField(columnName = FIELD_NAME_TRIP, foreign = true, foreignAutoRefresh = true)
     private Trip trip_ID;
 
     public SensorEntry(){}
 
-    public SensorEntry(String sensor, Date timestamp, double data1, double data2, double data3, Trip trip) {
+    public SensorEntry(String sensor, Date timestamp, double data1, double data2, double data3, double data4, Trip trip) {
         this.timestamp = timestamp;
         this.data1 = data1;
         this.data2 = data2;
         this.data3 = data3;
+        this.data4 = data4;
         this.trip_ID = trip;
     }
 }

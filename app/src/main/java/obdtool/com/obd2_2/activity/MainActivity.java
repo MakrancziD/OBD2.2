@@ -1,5 +1,7 @@
 package obdtool.com.obd2_2.activity;
 
+import android.hardware.SensorEvent;
+import android.location.Location;
 import android.support.v4.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -53,10 +55,13 @@ import obdtool.com.obd2_2.Fragment.VehicleInfoFragment;
 import obdtool.com.obd2_2.Fragment.VehicleListFragment;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
+import obdtool.com.obd2_2.db.Model.ObdEntry;
+import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
 import obdtool.com.obd2_2.db.Model.Vehicle;
 import obdtool.com.obd2_2.service.LocationService;
 import obdtool.com.obd2_2.service.ObdService;
+import obdtool.com.obd2_2.service.SensorService;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.CustomObdCommand;
 import obdtool.com.obd2_2.util.Enum;
@@ -79,9 +84,11 @@ public class MainActivity extends AppCompatActivity
     private Context context;
     private boolean isObdServiceBound;
     private boolean isLocationServiceBound;
+    private boolean isSensorServiceBound;
     private static final String COMP = MainActivityOld.class.getName();
     private ObdService obdService;
     private LocationService locationService;
+    private SensorService sensorService;
     private static final int REQUEST_ENABLE_BT = 1111;
 
     private static final String DEVICES = "btDevices";
@@ -108,10 +115,18 @@ public class MainActivity extends AppCompatActivity
 
         context = getApplicationContext();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        doBindObdService();
         DbHandler.initDb(context);
+        DbHandler.setCurrentVehicle(sharedPreferences.getString("list_preference_veh", "default"));
+        doBindObdService();
+        doBindLocationService();
+        doBindSensorService();
         CheckBluetoothAdapter();
         UpdateBtDevList();
+
+        //DEBUG
+        List<ObdEntry> obdE = DbHandler.getAllObdEntries();
+        List<SensorEntry> sensE = DbHandler.getAllSensorEntries();
+        int i = 0;
     }
 
     private void TryConnectDefaultBtDevice() {
@@ -231,6 +246,18 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private void doBindSensorService() {
+        if(!isSensorServiceBound) {
+            Log.d(COMP, "Binding sensor service..");
+            Intent sensorServiceIntent = new Intent(this, SensorService.class);
+            if(bindService(sensorServiceIntent, sensorServiceConnection, Context.BIND_AUTO_CREATE))
+            {
+                Log.d(COMP, "location service bound true");
+            }
+            else {Log.d(COMP, "location service bound false");}
+        }
+    }
+
     private void doUnbindObdService() {
         if (isObdServiceBound) {
             if (obdService.isRunning()) {
@@ -282,6 +309,26 @@ public class MainActivity extends AppCompatActivity
             isLocationServiceBound = true;
             locationService = ((LocationService.LocationServiceBinder) service).getService();
             locationService.setContext(MainActivity.this);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            Log.d(COMP, name.toString() + " locationService is unbound");
+            isLocationServiceBound = false;
+        }
+    };
+
+    public Location getLocation() {
+        return locationService.getLocation();
+    }
+
+    private ServiceConnection sensorServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            Log.d(COMP, name.toString()+ " sensorService is bound");
+            isSensorServiceBound = true;
+            sensorService = ((SensorService.SensorServiceBinder) service).getService();
+            sensorService.setContext(MainActivity.this);
         }
 
         @Override
@@ -418,7 +465,25 @@ public class MainActivity extends AppCompatActivity
         obdService.setLiveCommands(cmdList);
     }
 
+    public void enableLocation(boolean b) {
+        locationService.enableLocation(b);
+    }
+
+    public void enableSensor(boolean b) {
+        sensorService.enableSensors(b);
+    }
+
     public void updateLive(ObdCommand cmd)
+    {
+        currentFragment.update(cmd);
+    }
+
+    public void updateLive(Location cmd)
+    {
+        currentFragment.update(cmd);
+    }
+
+    public void updateLive(SensorEvent cmd)
     {
         currentFragment.update(cmd);
     }
