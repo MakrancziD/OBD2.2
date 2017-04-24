@@ -29,7 +29,7 @@ public class SensorService extends Service implements SensorEventListener {
     private Context context;
 
     private long lastUpdate;
-    private int updateInterval=100; //TODO: Shared Pref
+    private int updateInterval=1000; //TODO: Shared Pref
 
     private Boolean isRunning=false;
 

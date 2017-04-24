@@ -116,7 +116,7 @@ public class MainActivity extends AppCompatActivity
         context = getApplicationContext();
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         DbHandler.initDb(context);
-        DbHandler.setCurrentVehicle(sharedPreferences.getString("list_preference_veh", "default"));
+        DbHandler.setCurrentVehicle(sharedPreferences.getString("list_preference_veh", "1"));
         UpdateBtDevList();
         doBindObdService();
         doBindLocationService();
@@ -125,9 +125,9 @@ public class MainActivity extends AppCompatActivity
 
 
         //DEBUG
-        List<ObdEntry> obdE = DbHandler.getAllObdEntries();
-        List<SensorEntry> sensE = DbHandler.getAllSensorEntries();
-        int i = 0;
+//        List<ObdEntry> obdE = DbHandler.getAllObdEntries();
+//        List<SensorEntry> sensE = DbHandler.getAllSensorEntries();
+//        int i = 0;
     }
 
     private void TryConnectDefaultBtDevice() {

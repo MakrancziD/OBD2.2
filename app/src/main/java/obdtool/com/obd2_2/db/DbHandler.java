@@ -84,8 +84,11 @@ public class DbHandler {
             }
         }
         try {
-            int tripID = tripDao.create(new Trip(d, getCurrentVehicle()));
-            currentTrip = tripDao.queryForId(tripID);
+            Trip t = new Trip(d, getCurrentVehicle());
+            if(tripDao.create(t)==1)
+            {
+                currentTrip=t;
+            }
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
         }
@@ -111,7 +114,7 @@ public class DbHandler {
             startTrip();
         }
         try {
-            obdDao.create(new ObdEntry(new Date(), cmd.getName(), cmd.getResult(), Integer.parseInt(cmd.getCalculatedResult()), currentTrip));
+            obdDao.create(new ObdEntry(new Date(), cmd.getName(), cmd.getResult(), Double.parseDouble(cmd.getCalculatedResult()), currentTrip));
             //TODO: batch store every minute?
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());

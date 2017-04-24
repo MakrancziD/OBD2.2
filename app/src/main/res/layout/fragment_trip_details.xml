@@ -7,36 +7,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
         <com.jjoe64.graphview.GraphView
             android:id="@+id/tripGraph"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="400dp" />
 
         <LinearLayout
             android:id="@+id/checkbox_view"
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-
-            <com.google.android.gms.maps.MapView
-                android:id="@+id/tripMap"
-                android:layout_width="match_parent"
-                android:layout_height="500dp"
-                android:apiKey="@string/maps_api_key">
-
-            </com.google.android.gms.maps.MapView>
-
-            <CheckBox
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
         </LinearLayout>
 
+        <com.google.android.gms.maps.MapView
+            android:id="@+id/tripMap"
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            android:apiKey="@string/maps_api_key">
 
+        </com.google.android.gms.maps.MapView>
 
     </TableLayout>
 

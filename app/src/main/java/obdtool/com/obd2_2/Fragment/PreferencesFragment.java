@@ -138,8 +138,8 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements Rec
         int i = 0;
         for(Vehicle vehicle : vehicleList)
         {
-            entries[i] = Integer.toString(vehicle.getID_vehicle());
-            entryValues[i] = vehicle.toString();
+            entries[i] = vehicle.toString();
+            entryValues[i] = Integer.toString(vehicle.getID_vehicle());
             i++;
         }
         lp.setEntries(entries);

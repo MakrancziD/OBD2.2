@@ -31,6 +31,7 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
+import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,6 +43,7 @@ import java.util.Map;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.ObdEntry;
+import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
 import obdtool.com.obd2_2.service.LocationService;
 import obdtool.com.obd2_2.util.ReceiverFragment;
@@ -55,6 +57,7 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
     private Date tripStart;
 
     private Map<String, List<ObdEntry>> obdMap = new HashMap<>();
+    private Map<String, List<SensorEntry>> sensorMap = new HashMap<>();
     private Map<String, LineGraphSeries<DataPoint>> graphMap = new HashMap<>();
     private GraphView graph;
     private MapView mapView;
@@ -85,12 +88,13 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
         if (getArguments() != null) {
             tripId = getArguments().getInt(TRIP_ID);
             trip = DbHandler.getTrip(tripId);
-            fillMap();
+            fillObdMap();
+            fillSensorMap();
             tripStart = DbHandler.getTrip(tripId).getStart_time();
         }
     }
 
-    private void fillMap() {
+    private void fillObdMap() {
         List<ObdEntry> data = new ArrayList<>(trip.getObdEntries());
 
         for (ObdEntry e : data) {
@@ -98,6 +102,19 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
             if (value == null) {
                 obdMap.put(e.getRequest(), new ArrayList<ObdEntry>());
                 value = obdMap.get(e.getRequest());
+            }
+            value.add(e);
+        }
+    }
+
+    private void fillSensorMap() {
+        List<SensorEntry> data = new ArrayList<>(trip.getSensorEntries());
+
+        for (SensorEntry e : data) {
+            List<SensorEntry> value = sensorMap.get(e.getSensor());
+            if (value == null) {
+                sensorMap.put(e.getSensor(), new ArrayList<SensorEntry>());
+                value = sensorMap.get(e.getSensor());
             }
             value.add(e);
         }
@@ -116,13 +133,34 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
         graph = (GraphView) v.findViewById(R.id.tripGraph);
         layoutChkbox = (LinearLayout) v.findViewById(R.id.checkbox_view);
 
-        populateCheckBoxView();
+        populateCheckBoxViewObd();
         return v;
     }
 
-    private void populateCheckBoxView() {
+    private void populateCheckBoxViewObd() {
         if (obdMap != null) {
             for (Map.Entry e : obdMap.entrySet()) {
+                final String eKey = e.getKey().toString();
+                CheckBox cb = new CheckBox(getContext());
+                cb.setText(eKey);
+                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            addToGraph(eKey);
+                        } else {
+                            removeFromGraph(eKey);
+                        }
+                    }
+                });
+                layoutChkbox.addView(cb);
+            }
+        }
+    }
+
+    private void populateCheckBoxViewSensor() {
+        if (sensorMap != null) {
+            for (Map.Entry e : sensorMap.entrySet()) {
                 final String eKey = e.getKey().toString();
                 CheckBox cb = new CheckBox(getContext());
                 cb.setText(eKey);
@@ -146,21 +184,39 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
             graph.addSeries(graphMap.get(entries));
         } else {
             List<ObdEntry> entryList = obdMap.get(entries);
-            LineGraphSeries<DataPoint> graphPoints = new LineGraphSeries<>();
-            List<DataPoint> dataPointList = new ArrayList<>();
-            for (ObdEntry e : entryList) {
-                long diff = Math.abs(e.getTimestamp().getTime() - tripStart.getTime());
-                dataPointList.add(new DataPoint(diff, e.getFormatted_data()));
+            DataPoint[] dataPointList = new DataPoint[entryList.size()];
+            for (int i = 0; i<entryList.size(); i++) {
+                long diff = Math.abs(entryList.get(i).getTimestamp().getTime() - tripStart.getTime());
+                dataPointList[i] = new DataPoint(diff/1000, entryList.get(i).getFormatted_data());
             }
-            LineGraphSeries<DataPoint> series = new LineGraphSeries<DataPoint>((DataPoint[]) dataPointList.toArray());
+            LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointList);
             graphMap.put(entries, series);
+
+            updateGraph();
         }
     }
 
     private void removeFromGraph(String key) {
         if (graphMap.containsKey(key)) {
             graph.removeSeries(graphMap.get(key));
+            graphMap.remove(key);
         }
+    }
+
+    private void updateGraph() {
+        graph.removeAllSeries();
+        double maxTime = 0;
+        for(Map.Entry e : graphMap.entrySet()) {
+            graph.addSeries((Series) e.getValue());
+            double currentMax = ((Series) e.getValue()).getHighestValueX();
+            if(maxTime<currentMax)
+                maxTime=currentMax;
+        }
+        graph.getViewport().setXAxisBoundsManual(true);
+        graph.getViewport().setMaxX(maxTime);
+        graph.getViewport().setMinX(0);
+        graph.getViewport().setScalable(true);
+
     }
 
     private String printData() {

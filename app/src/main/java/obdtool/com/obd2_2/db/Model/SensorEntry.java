@@ -55,4 +55,28 @@ public class SensorEntry {
         this.data4 = data4;
         this.trip_ID = trip;
     }
+
+    public String getSensor() {
+        return sensor;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public double getData1() {
+        return data1;
+    }
+
+    public double getData2() {
+        return data2;
+    }
+
+    public double getData3() {
+        return data3;
+    }
+
+    public double getData4() {
+        return data4;
+    }
 }
