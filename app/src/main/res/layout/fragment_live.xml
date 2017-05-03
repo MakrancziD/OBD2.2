@@ -4,223 +4,302 @@
     android:layout_height="match_parent"
     tools:context="obdtool.com.obd2_2.Fragment.LiveFragment">
 
-    <LinearLayout
-        android:id="@+id/row_RPM"
+    <Spinner
+        android:id="@+id/spn_dataType"
+        android:layout_margin="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content" />
 
-        <TextView
-            android:text="@string/label_RPM"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_RPM" />
-        <TextView
-            android:text="@string/zero"
-            android:layout_width="50dp"
-            android:textAlignment="viewEnd"
-            android:layout_height="wrap_content"
-            android:id="@+id/value_RPM" />
-        <TextView
-            android:text="@string/unit_RPM"
+    <LinearLayout
+        android:id="@+id/layout_dash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/spn_dataType">
+
+        <LinearLayout
+            android:id="@+id/row_RPM"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_margin="20dp"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="@string/label_RPM"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/label_RPM" />
+            <TextView
+                android:text="@string/zero"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:textSize="30sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/value_RPM" />
+
+            <TextView
+                android:text="@string/unit_RPM"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/unit_RPM" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row_speed"
+            android:orientation="vertical"
+            android:layout_weight="2"
+            android:layout_margin="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/unit_RPM" />
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:text="@string/label_Speed"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:id="@+id/label_Speed" />
+            <TextView
+                android:text="@string/zero"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="50sp"
+                android:textAlignment="center"
+                android:layout_height="wrap_content"
+                android:id="@+id/value_Speed" />
+            <TextView
+                android:text="@string/unit_speed"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/unit_speed" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/row_coolant"
+            android:orientation="vertical"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
+            android:layout_width="60dp"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="@string/label_coolant"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/label_coolant" />
+            <TextView
+                android:text="@string/zero"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:textSize="30sp"
+                android:layout_height="wrap_content"
+                android:id="@+id/value_coolant" />
+            <TextView
+                android:text="@string/unit_temperature"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/unit_coolant" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/row_speed"
+        android:id="@+id/layout_2"
+        android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/row_RPM">
+        android:layout_below="@+id/layout_dash"
+        android:layout_alignParentStart="true">
 
-        <TextView
-            android:text="@string/label_Speed"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_Speed" />
-        <TextView
-            android:text="@string/zero"
-            android:layout_width="50dp"
-            android:textAlignment="viewEnd"
-            android:layout_height="wrap_content"
-            android:id="@+id/value_Speed" />
-        <TextView
-            android:text="@string/unit_speed"
+        <Button
+            android:id="@+id/btnStartStop"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/unit_speed" />
+            android:layout_margin="10dp"
+            android:text="@string/start"/>
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/row_coolant"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_speed">
-
-        <TextView
-            android:text="@string/label_coolant"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/label_coolant" />
-        <TextView
-            android:text="@string/zero"
-            android:layout_width="50dp"
-            android:textAlignment="viewEnd"
-            android:layout_height="wrap_content"
-            android:id="@+id/value_coolant" />
-        <TextView
-            android:text="@string/unit_temperature"
+        <RelativeLayout
+            android:layout_margin="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/unit_coolant" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/row_acc_x"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
 
-    <Button
-        android:id="@+id/btnStartStop"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_coolant"
-        android:text="@string/start"/>
+                <TextView
+                    android:id="@+id/label_acc_x"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/x"/>
+                <TextView
+                    android:text="@string/zero"
+                    android:layout_width="80dp"
+                    android:textAlignment="viewEnd"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/value_acc_x" />
 
-    <LinearLayout
-        android:id="@+id/row_acc_x"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/btnStartStop">
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/row_acc_y"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_acc_x">
 
-        <TextView
-            android:id="@+id/label_acc_x"
+                <TextView
+                    android:id="@+id/label_acc_y"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/y"/>
+                <TextView
+                    android:text="@string/zero"
+                    android:layout_width="80dp"
+                    android:textAlignment="viewEnd"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/value_acc_y" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/row_acc_z"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/row_acc_y">
+
+                <TextView
+                    android:id="@+id/label_acc_z"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/z"/>
+                <TextView
+                    android:text="@string/zero"
+                    android:layout_width="80dp"
+                    android:textAlignment="viewEnd"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/value_acc_z" />
+
+            </LinearLayout>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_margin="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/x"/>
-        <TextView
-            android:text="@string/zero"
-            android:layout_width="50dp"
-            android:textAlignment="viewEnd"
-            android:layout_height="wrap_content"
-            android:id="@+id/value_acc_x" />
+            android:layout_height="wrap_content">
 
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/row_acc_y"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_acc_x">
+            <LinearLayout
+            android:id="@+id/row_gps_lat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/label_acc_y"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/y"/>
-        <TextView
-            android:text="@string/zero"
-            android:layout_width="50dp"
-            android:textAlignment="viewEnd"
-            android:layout_height="wrap_content"
-            android:id="@+id/value_acc_y" />
-
-    </LinearLayout>
-    <LinearLayout
-        android:id="@+id/row_acc_z"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_acc_y">
-
-        <TextView
-            android:id="@+id/label_acc_z"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/z"/>
-        <TextView
-            android:text="@string/zero"
-            android:layout_width="50dp"
-            android:textAlignment="viewEnd"
-            android:layout_height="wrap_content"
-            android:id="@+id/value_acc_z" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/row_gps_lat"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_acc_z">
-
-        <TextView
+            <TextView
             android:id="@+id/label_gps_lat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lat"/>
-        <TextView
+            <TextView
             android:text="@string/zero"
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:textAlignment="viewEnd"
             android:layout_height="wrap_content"
             android:id="@+id/value_gps_lat" />
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/row_gps_lon"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_gps_lat">
+            <LinearLayout
+            android:id="@+id/row_gps_lon"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/row_gps_lat">
 
-        <TextView
+            <TextView
             android:id="@+id/label_gps_lon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/lon"/>
-        <TextView
-            android:text="@string/zero"
-            android:layout_width="50dp"
-            android:textAlignment="viewEnd"
+
+                <TextView
+                    android:id="@+id/value_gps_lon"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/zero"
+                    android:textAlignment="viewEnd" />
+
+            </LinearLayout>
+
+            <LinearLayout
+            android:id="@+id/row_gps_alt"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/value_gps_lon" />
+            android:layout_below="@id/row_gps_lon"
+                android:weightSum="1">
 
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/row_gps_alt"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_gps_lon">
-
-        <TextView
+            <TextView
             android:id="@+id/label_gps_alt"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/alt"/>
-        <TextView
+            <TextView
             android:text="@string/zero"
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:textAlignment="viewEnd"
             android:layout_height="wrap_content"
             android:id="@+id/value_gps_alt" />
 
-    </LinearLayout>
+            </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/row_gps_spd"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/row_gps_alt">
+            <LinearLayout
+            android:id="@+id/row_gps_spd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/row_gps_alt">
 
-        <TextView
+            <TextView
             android:id="@+id/label_gps_spd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/label_Speed"/>
-        <TextView
+            <TextView
             android:text="@string/zero"
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:textAlignment="viewEnd"
             android:layout_height="wrap_content"
             android:id="@+id/value_gps_spd" />
 
+            </LinearLayout>
+
+        </RelativeLayout>
+
+
     </LinearLayout>
+
+
+
+
+
+
+
+    <com.google.android.gms.maps.MapView
+        android:layout_below="@id/layout_2"
+        android:layout_margin="10dp"
+        android:id="@+id/tripMap"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:apiKey="@string/maps_api_key">
+
+    </com.google.android.gms.maps.MapView>
+
+
+
+
 
 </RelativeLayout>

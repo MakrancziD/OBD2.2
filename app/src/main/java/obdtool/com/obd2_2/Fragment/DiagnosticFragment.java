@@ -7,6 +7,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,7 +37,7 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
     private TextView milOn;
     private TextView dtcCnt;
     private ListView dtcList;
-    private Button btnClear;
+    private FloatingActionButton btnClear;
     private TextView testResults;
 
     private MonitorStatusCommand currentMonitorStatus;
@@ -65,10 +66,10 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_diagnostic, container, false);
-        milOn = (TextView) v.findViewById(R.id.mil_status);
+        //milOn = (TextView) v.findViewById(R.id.mil_status);
         dtcCnt = (TextView) v.findViewById(R.id.dtc_cnt);
         dtcList = (ListView) v.findViewById(R.id.list_DTC);
-        btnClear = (Button) v.findViewById(R.id.btn_clear);
+        btnClear = (FloatingActionButton) v.findViewById(R.id.btn_clear);
         testResults = (TextView) v.findViewById(R.id.tests);
 
         dtcAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, itemsDTC);

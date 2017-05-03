@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/id"
+        android:id="@+id/txt_acc_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_centerVertical="true"
+        android:text="1"
+        android:textAppearance="?attr/textAppearanceListItem"
+        android:layout_margin="10dp"
+        />
 
     <TextView
-        android:id="@+id/content"
-        android:layout_toEndOf="@id/id"
+        android:id="@+id/txt_acc_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:textAppearance="?attr/textAppearanceListItem" />
+        android:layout_centerVertical="true"
+        android:text="MyTime"
+        android:layout_toEndOf="@id/txt_acc_top"
+        android:layout_margin="5dp"
+        android:textAppearance="?attr/textAppearanceListItem"/>
 
     <ImageButton
         android:id="@+id/btnDeleteAcc"
@@ -27,4 +31,5 @@
         android:layout_margin="5dp"
         android:background="@drawable/ic_delete_black"
         />
+
 </RelativeLayout>

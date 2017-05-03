@@ -1,7 +1,10 @@
 package obdtool.com.obd2_2.activity;
 
+import android.Manifest;
+import android.content.pm.PackageManager;
 import android.hardware.SensorEvent;
 import android.location.Location;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -16,13 +19,11 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -39,8 +40,6 @@ import com.google.gson.Gson;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 import obdtool.com.obd2_2.Fragment.AccelerationFragment;
@@ -55,8 +54,6 @@ import obdtool.com.obd2_2.Fragment.VehicleInfoFragment;
 import obdtool.com.obd2_2.Fragment.VehicleListFragment;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
-import obdtool.com.obd2_2.db.Model.ObdEntry;
-import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
 import obdtool.com.obd2_2.db.Model.Vehicle;
 import obdtool.com.obd2_2.service.LocationService;
@@ -64,7 +61,6 @@ import obdtool.com.obd2_2.service.ObdService;
 import obdtool.com.obd2_2.service.SensorService;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.CustomObdCommand;
-import obdtool.com.obd2_2.util.Enum;
 import obdtool.com.obd2_2.util.ObdCommandJob;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
@@ -90,6 +86,7 @@ public class MainActivity extends AppCompatActivity
     private LocationService locationService;
     private SensorService sensorService;
     private static final int REQUEST_ENABLE_BT = 1111;
+    private static final int PERMISSION_REQUEST_LOCATION = 22;
 
     private static final String DEVICES = "btDevices";
     private SharedPreferences sharedPreferences;
@@ -222,7 +219,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doBindObdService() {
-        if (!isObdServiceBound) {
+        if (!isObdServiceBound()) {
             Log.d(COMP, "Binding OBD obdService..");
             Intent serviceIntent = new Intent(this, ObdService.class);
             if(bindService(serviceIntent, obdServiceConn, Context.BIND_AUTO_CREATE))
@@ -234,7 +231,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doBindLocationService() {
-        if(!isLocationServiceBound) {
+        if(!isLocationServiceBound()) {
             Log.d(COMP, "Binding location service..");
             Intent locationServiceIntent = new Intent(this, LocationService.class);
             if(bindService(locationServiceIntent, locationServiceConnection, Context.BIND_AUTO_CREATE))
@@ -246,7 +243,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doBindSensorService() {
-        if(!isSensorServiceBound) {
+        if(!isSensorServiceBound()) {
             Log.d(COMP, "Binding sensor service..");
             Intent sensorServiceIntent = new Intent(this, SensorService.class);
             if(bindService(sensorServiceIntent, sensorServiceConnection, Context.BIND_AUTO_CREATE))
@@ -258,7 +255,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doUnbindObdService() {
-        if (isObdServiceBound) {
+        if (isObdServiceBound()) {
             if (obdService.isRunning()) {
                 obdService.stopService();
             }
@@ -269,7 +266,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void doUnbindLocationService() {
-        if (isLocationServiceBound) {
+        if (isLocationServiceBound()) {
             if (locationService.isRunning()) {
                 locationService.stopService();
             }
@@ -308,6 +305,7 @@ public class MainActivity extends AppCompatActivity
             isLocationServiceBound = true;
             locationService = ((LocationService.LocationServiceBinder) service).getService();
             locationService.setContext(MainActivity.this);
+            checkLocationPermission();
         }
 
         @Override
@@ -317,8 +315,15 @@ public class MainActivity extends AppCompatActivity
         }
     };
 
+    private void checkLocationPermission() {
+        if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION}, PERMISSION_REQUEST_LOCATION);
+        }
+    }
+
     public Location getLocation() {
-        return locationService.getLocation();
+            return locationService.getLocation();
     }
 
     private ServiceConnection sensorServiceConnection = new ServiceConnection() {
@@ -501,5 +506,30 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onListFragmentInteraction(Vehicle item) {
 
+    }
+
+    public boolean isObdServiceBound() {
+        return isObdServiceBound;
+    }
+
+    public boolean isLocationServiceBound() {
+        return isLocationServiceBound;
+    }
+
+    public boolean isSensorServiceBound() {
+        return isSensorServiceBound;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case PERMISSION_REQUEST_LOCATION: {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    isLocationServiceBound = true;
+                }
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-package obdtool.com.obd2_2.Fragment;
+package obdtool.com.obd2_2.Adapter;
 
 import android.app.Dialog;
 import android.content.Context;

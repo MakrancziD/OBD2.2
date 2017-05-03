@@ -1,9 +1,7 @@
 package obdtool.com.obd2_2.db;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.location.Location;
-import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.github.pires.obd.commands.ObdCommand;
@@ -61,7 +59,7 @@ public class DbHandler {
 
     public static void startTrip()
     {
-        if(currentTrip!=null)
+        if(getCurrentTrip() !=null)
         {
             endTrip();
         }
@@ -96,11 +94,11 @@ public class DbHandler {
 
     public static void endTrip()
     {
-        if(currentTrip!=null)
+        if(getCurrentTrip() !=null)
         {
-            currentTrip.setEnd_time(new Date());
+            getCurrentTrip().setEnd_time(new Date());
             try {
-                tripDao.update(currentTrip);
+                tripDao.update(getCurrentTrip());
             } catch (SQLException e) {
                 Log.e(COMP, e.getMessage());
             }
@@ -110,11 +108,11 @@ public class DbHandler {
 
     public static void storeObd(ObdCommand cmd)
     {
-        if(currentTrip==null) {
+        if(getCurrentTrip() ==null) {
             startTrip();
         }
         try {
-            obdDao.create(new ObdEntry(new Date(), cmd.getName(), cmd.getResult(), Double.parseDouble(cmd.getCalculatedResult()), currentTrip));
+            obdDao.create(new ObdEntry(new Date(), cmd.getName(), cmd.getResult(), Double.parseDouble(cmd.getCalculatedResult()), getCurrentTrip()));
             //TODO: batch store every minute?
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
@@ -143,7 +141,7 @@ public class DbHandler {
 
     public static void storeGpsEntry(Location entry)
     {
-        SensorEntry sEntry = new SensorEntry("GPS", new Date(entry.getTime()), entry.getLatitude(), entry.getLongitude(), entry.getAltitude(), entry.getSpeed(), currentTrip);
+        SensorEntry sEntry = new SensorEntry("GPS", new Date(entry.getTime()), entry.getLatitude(), entry.getLongitude(), entry.getAltitude(), entry.getSpeed(), getCurrentTrip());
         try {
             sensorDao.create(sEntry);
         } catch (SQLException e) {
@@ -162,7 +160,7 @@ public class DbHandler {
 
     public static void storeSensorResult(String type, Date timestasmp, double x, double y, double z, double zz)
     {
-        SensorEntry sEntry = new SensorEntry(type, timestasmp, x, y, z, zz, currentTrip);
+        SensorEntry sEntry = new SensorEntry(type, timestasmp, x, y, z, zz, getCurrentTrip());
         try {
             sensorDao.create(sEntry);
         } catch (SQLException e) {
@@ -248,5 +246,9 @@ public class DbHandler {
             Log.e(COMP, e.getMessage());
         }
         return null;
+    }
+
+    public static Trip getCurrentTrip() {
+        return currentTrip;
     }
 }

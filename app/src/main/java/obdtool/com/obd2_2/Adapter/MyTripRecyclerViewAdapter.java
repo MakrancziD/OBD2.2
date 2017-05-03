@@ -1,4 +1,4 @@
-package obdtool.com.obd2_2.util;
+package obdtool.com.obd2_2.Adapter;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

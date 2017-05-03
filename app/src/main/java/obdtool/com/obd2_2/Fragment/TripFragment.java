@@ -17,7 +17,7 @@ import com.github.pires.obd.commands.ObdCommand;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.Trip;
-import obdtool.com.obd2_2.util.MyTripRecyclerViewAdapter;
+import obdtool.com.obd2_2.Adapter.MyTripRecyclerViewAdapter;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
 public class TripFragment extends Fragment implements ReceiverFragment {

@@ -2,56 +2,56 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="obdtool.com.obd2_2.Fragment.DiagnosticFragment">
 
+    <RelativeLayout
+        android:layout_margin="20dp"
+        android:id="@+id/layout_DTC_num"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:text="@string/dtc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/dtc"/>
+
+        <TextView
+            android:id="@+id/dtc_cnt"
+            android:text="@string/none"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/dtc"
+            android:layout_marginStart="50dp"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/ic_mil"/>
+
+    </RelativeLayout>
 
     <TextView
-        android:text="@string/mil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/mil" />
-    <TextView
-        android:id="@+id/mil_status"
-        android:text="@string/on"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/mil"
-        android:layout_marginStart="50dp"/>
-
-    <TextView
-        android:text="@string/dtc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dtc"
-        android:layout_below="@id/mil"/>
-
-    <TextView
-        android:id="@+id/dtc_cnt"
-        android:text="@string/none"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/dtc"
-        android:layout_below="@id/mil_status"
-        android:layout_marginStart="50dp"/>
-
-    <TextView
+        android:text="ASD"
+        android:layout_below="@id/layout_DTC_num"
         android:id="@+id/tests"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/dtc"
-        android:text="@string/none"/>
+        android:layout_height="wrap_content" />
 
     <ListView
         android:id="@+id/list_DTC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tests"
-        android:layout_marginTop="20dp"/>
+        android:layout_below="@id/tests"/>
 
-    <Button
+    <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_clear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/btn_clearDTC"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_margin="@dimen/fab_margin"
+        app:srcCompat="@drawable/ic_delete_black" />
 </RelativeLayout>

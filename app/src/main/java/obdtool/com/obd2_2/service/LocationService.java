@@ -27,8 +27,6 @@ import obdtool.com.obd2_2.db.DbHandler;
 
 public class LocationService extends Service implements LocationListener {
 
-    private Context mContext;
-
     boolean isGPSEnabled = false;
     boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
@@ -45,20 +43,21 @@ public class LocationService extends Service implements LocationListener {
 
     private boolean isRunning=false;
 
-    public LocationService(Context context) {
-        this.mContext = context;
-        getLocation();
-    }
+//    public LocationService(Context context) {
+//        this.mContext = context;
+//        getLocation();
+//    }
 
     public LocationService(){}
 
     public Location getLocation() {
         try {
             if (Build.VERSION.SDK_INT >= 23 &&
-                    ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(mContext, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            }
 
-                locationManager = (LocationManager) mContext
+                locationManager = (LocationManager) context
                         .getSystemService(LOCATION_SERVICE);
 
                 isGPSEnabled = locationManager
@@ -106,7 +105,6 @@ public class LocationService extends Service implements LocationListener {
                         }
                     }
                 }
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }

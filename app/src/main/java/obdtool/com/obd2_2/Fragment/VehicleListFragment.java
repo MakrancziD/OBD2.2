@@ -5,7 +5,6 @@ import android.content.Context;
 import android.hardware.SensorEvent;
 import android.location.Location;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -21,6 +20,7 @@ import com.github.pires.obd.commands.ObdCommand;
 
 import java.util.List;
 
+import obdtool.com.obd2_2.Adapter.MyVehicleRecyclerViewAdapter;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.Vehicle;

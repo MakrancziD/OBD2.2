@@ -13,7 +13,7 @@ import Util.CommandHelper;
 
 public class PIDSupport extends ObdCommand {
 
-    String binResult= new String();
+    private String binResult= "";
     private List<ObdCommand> supportedCommands = new ArrayList<>();
 
     private final Enums.PIDsupport range;
@@ -45,7 +45,7 @@ public class PIDSupport extends ObdCommand {
 
     @Override
     public String getFormattedResult() {
-        String out=new String();
+        String out= "";
         for(ObdCommand cmd : getSupportedCommands())
         {
             out+=cmd.getName()+"/n";
