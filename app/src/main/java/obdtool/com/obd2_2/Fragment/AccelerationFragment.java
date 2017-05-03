@@ -1,72 +1,64 @@
 package obdtool.com.obd2_2.Fragment;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.SensorEvent;
 import android.location.Location;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
-import android.support.annotation.IntDef;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.NumberPicker;
 import android.widget.TextView;
 
 import com.github.pires.obd.commands.ObdCommand;
 
-import org.florescu.android.rangeseekbar.RangeSeekBar;
-
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import Commands.PID.SpeedCommand;
+import obdtool.com.obd2_2.Adapter.AccelerationRecyclerViewAdapter;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.Acceleration;
-import obdtool.com.obd2_2.db.Model.Vehicle;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 import obdtool.com.obd2_2.util.Stopwatch;
 
 
 public class AccelerationFragment extends Fragment implements ReceiverFragment {
 
-    private OnFragmentInteractionListener mListener;
+    private OnListFragmentInteractionListener mListener;
 
     private NumberPicker numPickStart;
     private NumberPicker numPickFinish;
     private Button btnStart;
-    private Chronometer chrTimer;
+    private TextView txtTimer;
     private TextView txtSpeed;
+    private RecyclerView listAcc;
 
     private MainActivity parentActivity;
 
     final int MSG_START_TIMER = 0;
-    final int MSG_STOP_TIMER_SUCCESSFUL = 1;
-    final int MSG_STOP_TIMER_UNSUCCESSFUL = 2;
+    final int MSG_STOP_TIMER = 1;
     final int MSG_UPDATE_TIMER = 3;
+    final int REFRESH_RATE=50;
 
     final int PICKER_MIN = 0;
     final int PICKER_MAX = 200;
     final int PICKER_STEP = 10;
-    final int PICKER_DEFAULT_START=0;
-    final int PICKER_DEFAULT_FINISH = 100;
 
     Stopwatch timer = new Stopwatch();
-    private int REFRESH_RATE;
-
-    private SharedPreferences sharedPreferences;
 
     private List<ObdCommand> cmdList = new ArrayList<>();
     private boolean isRecording = false;
+    private boolean isStarted = false;
+
+    //private int testSpeed=0;
 
     private NumberPicker.OnScrollListener scrollListener = new NumberPicker.OnScrollListener() {
         @Override
@@ -75,6 +67,20 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         }
     };
 
+//    private Thread testThread = new Thread(new Runnable() {
+//        @Override
+//        public void run() {
+//            for(int i=0;i<22;i++) {
+//                testSpeed+=5;
+//                testTimer();
+//                try {
+//                    Thread.sleep(100);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    });
 
     public AccelerationFragment() {
         // Required empty public constructor
@@ -87,8 +93,6 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
 
         parentActivity=(MainActivity) getActivity();
         cmdList.add(new SpeedCommand());
-        sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        REFRESH_RATE = sharedPreferences.getInt("sensor_rate", 100);
     }
 
     @Override
@@ -123,8 +127,11 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
             }
         });
 
-        chrTimer = (Chronometer) v.findViewById(R.id.chronoTimer);
+        txtTimer = (TextView) v.findViewById(R.id.txtTimer);
         txtSpeed = (TextView) v.findViewById(R.id.txtSpeed);
+
+        listAcc = (RecyclerView) v.findViewById(R.id.acc_list);
+        listAcc.setAdapter(new AccelerationRecyclerViewAdapter(DbHandler.getAllAcc(), mListener));
 
         return v;
     }
@@ -141,6 +148,8 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
 
     private void startRecording()
     {
+//        if(!testThread.isAlive())
+//            testThread.start();
         btnStart.setText(R.string.stop);
         numPickStart.setEnabled(false);
         numPickFinish.setEnabled(false);
@@ -158,21 +167,14 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         numPickFinish.setEnabled(true);
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
+        if (context instanceof OnListFragmentInteractionListener) {
+            mListener = (OnListFragmentInteractionListener) context;
         } else {
             throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
+                    + " must implement OnListFragmentInteractionListener");
         }
     }
 
@@ -187,21 +189,31 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         //if(cmd instanceof SpeedCommand) {
             txtSpeed.setText(((SpeedCommand) cmd).getMetricSpeed());
 
-            if(((SpeedCommand) cmd).getMetricSpeed()>numPickFinish.getValue())
-            {
-                mHandler.sendEmptyMessage(MSG_STOP_TIMER_SUCCESSFUL);
-                return;
+        if(isStarted) {
+            if(((SpeedCommand) cmd).getMetricSpeed()>numPickFinish.getValue()) {
+                endMeasurement(true);
             }
-            if(((SpeedCommand) cmd).getMetricSpeed()>numPickStart.getValue())
-            {
-                mHandler.sendEmptyMessage(MSG_START_TIMER);
-                return;
+            else if(((SpeedCommand) cmd).getMetricSpeed()<=numPickStart.getValue()) {
+                endMeasurement(false);
             }
-            else
-            {
-                mHandler.sendEmptyMessage(MSG_STOP_TIMER_UNSUCCESSFUL);
-            }
-        //}
+        }
+        else if(((SpeedCommand) cmd).getMetricSpeed()>numPickStart.getValue()) {
+            startMeasurment();
+        }
+    }
+
+    private void startMeasurment() {
+        isStarted=true;
+        mHandler.sendEmptyMessage(MSG_START_TIMER);
+    }
+
+    private void endMeasurement(boolean success) {
+        isStarted=false;
+        mHandler.sendEmptyMessage(MSG_STOP_TIMER);
+        stopRecording();
+        if(success) {
+            storeTime(timer.getElapsedTime());
+        }
     }
 
     @Override
@@ -214,9 +226,15 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
 
     }
 
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
+    public interface OnListFragmentInteractionListener {
+        void onListFragmentInteraction(Acceleration item);
+    }
+
+    private void storeTime(long elapsed)
+    {
+        DbHandler.storeAccelResult(numPickStart.getValue()*PICKER_STEP,
+                numPickFinish.getValue()*PICKER_STEP,
+                elapsed); //TODO: track current vehicle
     }
 
     Handler mHandler = new Handler()
@@ -226,25 +244,18 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
             super.handleMessage(msg);
             switch (msg.what) {
                 case MSG_START_TIMER:
-                    timer.start(); //start timer
+                    timer.start();
                     mHandler.sendEmptyMessage(MSG_UPDATE_TIMER);
                     break;
+
                 case MSG_UPDATE_TIMER:
-                    chrTimer.setText(""+ timer.getElapsedTime());
-                    mHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIMER,REFRESH_RATE); //text view is updated every second,
-                    break;                                  //though the timer is still running
-                case MSG_STOP_TIMER_SUCCESSFUL:
-                    mHandler.removeMessages(MSG_UPDATE_TIMER); // no more updates.
-                    timer.stop();//stop timer
-                    chrTimer.setText(""+ timer.getElapsedTime());
-                    stopRecording();
-                    storeTime(timer.getElapsedTime());
+                    updateTimer(timer.getElapsedTime());
+                    mHandler.sendEmptyMessageDelayed(MSG_UPDATE_TIMER,REFRESH_RATE);
                     break;
-                case MSG_STOP_TIMER_UNSUCCESSFUL:
-                    mHandler.removeMessages(MSG_UPDATE_TIMER); // no more updates.
-                    timer.stop();//stop timer
-                    chrTimer.setText(""+ timer.getElapsedTime());
-                    stopRecording();
+                case MSG_STOP_TIMER:
+                    mHandler.removeMessages(MSG_UPDATE_TIMER);
+                    timer.stop();
+                    updateTimer(timer.getElapsedTime());
                     break;
                 default:
                     break;
@@ -252,12 +263,35 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         }
     };
 
-    private void storeTime(long elapsed)
-    {
-        DbHandler.storeAccelResult(new Acceleration(new Date(),
-                numPickStart.getValue(),
-                numPickFinish.getValue(),
-                elapsed,
-                new Vehicle())); //TODO: track current vehicle
+    private void updateTimer(long time) {
+        int sec = (int) Math.floor(time/1000);
+        int ms = (int) (time-(sec*1000));
+        String strMs = Integer.toString(ms);
+        while(strMs.length()<3) {
+            strMs+="0";
+        }
+        txtTimer.setText(sec+"."+strMs);
     }
+
+//    private void testTimer() {
+//
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                txtSpeed.setText(Integer.toString(testSpeed));
+//
+//                if(isStarted) {
+//                    if(testSpeed>(numPickFinish.getValue()*PICKER_STEP)) {
+//                        endMeasurement(true);
+//                    }
+//                    else if(testSpeed<=(numPickStart.getValue()*PICKER_STEP)) {
+//                        endMeasurement(false);
+//                    }
+//                }
+//                else if(testSpeed>(numPickStart.getValue()*PICKER_STEP) && testSpeed<(numPickFinish.getValue()*PICKER_STEP)) {
+//                    startMeasurment();
+//                }
+//            }
+//        });
+//    }
 }

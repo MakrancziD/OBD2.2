@@ -47,20 +47,21 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp" />
 
-            <Chronometer
+            <TextView
+                android:text="@string/stopwatch_default"
                 android:layout_centerHorizontal="true"
                 android:layout_margin="10dp"
                 android:layout_below="@id/btnStartAcceleration"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="50sp"
-                android:id="@+id/chronoTimer" />
+                android:id="@+id/txtTimer" />
 
             <TextView
-                android:layout_alignEnd="@id/chronoTimer"
+                android:layout_alignEnd="@id/txtTimer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/chronoTimer"
+                android:layout_below="@id/txtTimer"
                 android:text="@string/zero"
                 android:textSize="50sp"
                 android:id="@+id/txtSpeed" />

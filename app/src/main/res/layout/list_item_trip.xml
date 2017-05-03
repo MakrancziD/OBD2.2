@@ -20,7 +20,7 @@
         android:textAppearance="?attr/textAppearanceListItem" />
 
     <ImageButton
-        android:id="@+id/btnDeleteAcc"
+        android:id="@+id/btnDeleteTrip"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"

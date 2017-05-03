@@ -9,6 +9,7 @@ import com.j256.ormlite.table.TableUtils;
 
 import java.sql.SQLException;
 
+import obdtool.com.obd2_2.db.Model.Acceleration;
 import obdtool.com.obd2_2.db.Model.ObdEntry;
 import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
@@ -21,7 +22,7 @@ import obdtool.com.obd2_2.db.Model.Vehicle;
 public class DbHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME    = "ormlite.db";
-    private static final int    DATABASE_VERSION = 3;
+    private static final int    DATABASE_VERSION = 6;
 
     public DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,6 +36,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.createTable(connectionSource, Trip.class);
             TableUtils.createTable(connectionSource, ObdEntry.class);
             TableUtils.createTable(connectionSource, SensorEntry.class);
+            TableUtils.createTable(connectionSource, Acceleration.class);
         } catch(SQLException e) {
             throw new RuntimeException(e);
         }
@@ -48,6 +50,7 @@ public class DbHelper extends OrmLiteSqliteOpenHelper {
             TableUtils.dropTable(connectionSource, Trip.class, true);
             TableUtils.dropTable(connectionSource, ObdEntry.class, true);
             TableUtils.dropTable(connectionSource, SensorEntry.class, true);
+            TableUtils.dropTable(connectionSource, Acceleration.class, true);
             onCreate(database, connectionSource);
         } catch (SQLException e) {
             throw new RuntimeException(e);

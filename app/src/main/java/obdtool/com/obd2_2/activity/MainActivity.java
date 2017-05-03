@@ -54,6 +54,7 @@ import obdtool.com.obd2_2.Fragment.VehicleInfoFragment;
 import obdtool.com.obd2_2.Fragment.VehicleListFragment;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
+import obdtool.com.obd2_2.db.Model.Acceleration;
 import obdtool.com.obd2_2.db.Model.Trip;
 import obdtool.com.obd2_2.db.Model.Vehicle;
 import obdtool.com.obd2_2.service.LocationService;
@@ -73,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         DiagnosticFragment.OnFragmentInteractionListener,
         TripFragment.OnListFragmentInteractionListener,
         PreferencesFragment.OnFragmentInteractionListener,
-        AccelerationFragment.OnFragmentInteractionListener,
+        AccelerationFragment.OnListFragmentInteractionListener,
         TripDetailsFragment.OnFragmentInteractionListener,
         VehicleListFragment.OnListFragmentInteractionListener{
 
@@ -531,5 +532,10 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         }
+    }
+
+    @Override
+    public void onListFragmentInteraction(Acceleration item) {
+
     }
 }

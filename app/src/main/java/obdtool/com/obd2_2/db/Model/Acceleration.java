@@ -33,7 +33,7 @@ public class Acceleration {
     @DatabaseField(columnName = FIELD_NAME_DATA)
     private double data;
 
-    @DatabaseField(columnName = FIELD_NAME_VEHICLE)
+    @DatabaseField(columnName = FIELD_NAME_VEHICLE, foreign = true, foreignAutoRefresh = true)
     private Vehicle vehicle_ID;
 
     public Acceleration(Date timestamp, int from, int to, double data, Vehicle vehicle)
@@ -43,5 +43,31 @@ public class Acceleration {
         this.to = to;
         this.data = data;
         this.vehicle_ID = vehicle;
+    }
+
+    public Acceleration(){}
+
+    public int getID_acceleration() {
+        return ID_acceleration;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public int getFrom() {
+        return from;
+    }
+
+    public int getTo() {
+        return to;
+    }
+
+    public double getData() {
+        return data;
+    }
+
+    public Vehicle getVehicle_ID() {
+        return vehicle_ID;
     }
 }

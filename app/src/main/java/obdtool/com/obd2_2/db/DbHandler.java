@@ -43,6 +43,7 @@ public class DbHandler {
             tripDao = db.getDao(Trip.class);
             obdDao = db.getDao(ObdEntry.class);
             sensorDao = db.getDao(SensorEntry.class);
+            accelerationDao = db.getDao(Acceleration.class);
 
 
 //            vehicleDao.create(new Vehicle("Batmobile"));
@@ -149,15 +150,6 @@ public class DbHandler {
         }
     }
 
-    public static void storeAccelResult(Acceleration acc)
-    {
-        try {
-            accelerationDao.create(acc);
-        } catch (SQLException e) {
-            Log.e(COMP, e.getMessage());
-        }
-    }
-
     public static void storeSensorResult(String type, Date timestasmp, double x, double y, double z, double zz)
     {
         SensorEntry sEntry = new SensorEntry(type, timestasmp, x, y, z, zz, getCurrentTrip());
@@ -250,5 +242,39 @@ public class DbHandler {
 
     public static Trip getCurrentTrip() {
         return currentTrip;
+    }
+
+    public static void storeAccelResult(int from, int to, long elapsed) {
+        Acceleration acc = new Acceleration(new Date(), from, to, elapsed, currentVehicle);
+        try {
+            accelerationDao.create(acc);
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+    }
+
+    public static void deleteAccResult(Acceleration acc) {
+        try {
+            accelerationDao.delete(acc);
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+    }
+
+    public static List<Acceleration> getAllAcc() {
+        try {
+            return accelerationDao.queryForAll();
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        return null;
+    }
+
+    public static void deleteTrip(Trip t) {
+        try {
+            tripDao.delete(t);
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
     }
 }

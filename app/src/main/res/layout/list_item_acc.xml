@@ -23,6 +23,29 @@
         android:layout_margin="5dp"
         android:textAppearance="?attr/textAppearanceListItem"/>
 
+    <TextView
+        android:id="@+id/txtVeh"
+        android:layout_toEndOf="@id/txt_acc_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Veh"/>
+
+    <TextView
+        android:id="@+id/txtFrom"
+        android:layout_below="@id/txtVeh"
+        android:layout_toEndOf="@id/txt_acc_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="From"/>
+
+    <TextView
+        android:id="@+id/txtTo"
+        android:layout_toEndOf="@id/txtFrom"
+        android:layout_below="@id/txtVeh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="To"/>
+
     <ImageButton
         android:id="@+id/btnDeleteAcc"
         android:layout_width="wrap_content"

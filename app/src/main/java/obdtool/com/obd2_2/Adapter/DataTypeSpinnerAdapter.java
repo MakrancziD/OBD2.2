@@ -26,14 +26,12 @@ public class DataTypeSpinnerAdapter extends ArrayAdapter<DataTypeItem> {
 
     private Context ctx;
     private List<DataTypeItem> itemList;
-    private DataTypeSpinnerAdapter adapter;
     private boolean isFromView = false;
 
     public DataTypeSpinnerAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<DataTypeItem> objects) {
         super(context, resource, objects);
         this.ctx=context;
         this.itemList = objects;
-        this.adapter = this;
     }
 
 

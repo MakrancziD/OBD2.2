@@ -6,6 +6,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +20,7 @@ import com.github.pires.obd.commands.ObdCommand;
 import java.util.ArrayList;
 import java.util.List;
 
+import obdtool.com.obd2_2.Adapter.TerminalRecyclerViewAdapter;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.util.ReceiverFragment;
@@ -29,8 +31,8 @@ public class TerminalFragment extends Fragment implements ReceiverFragment {
     EditText editCommand;
     private final List<String> items = new ArrayList<>();
     MainActivity parentActivity;
-    private ArrayAdapter<String> itemsAdapter=null;
-    private ListView terminalView;
+    private TerminalRecyclerViewAdapter adapter;
+    private RecyclerView terminalView;
 
     private OnFragmentInteractionListener mListener;
 
@@ -50,9 +52,12 @@ public class TerminalFragment extends Fragment implements ReceiverFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_terminal, container, false);
-        terminalView=(ListView) view.findViewById(R.id.view_list_terminal);
-        itemsAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, items);
-        terminalView.setAdapter(itemsAdapter);
+        terminalView= (RecyclerView) view.findViewById(R.id.terminal_list);
+        adapter = new TerminalRecyclerViewAdapter(items);
+        terminalView.setAdapter(adapter);
+
+//        itemsAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, items);
+//        terminalView.setAdapter(itemsAdapter);
         editCommand=(EditText)view.findViewById(R.id.customCommand);
         btnSend=(Button) view.findViewById(R.id.btn_send);
         btnSend.setOnClickListener(new View.OnClickListener() {
@@ -67,9 +72,9 @@ public class TerminalFragment extends Fragment implements ReceiverFragment {
 
     private void runCommand(String command)
     {
-        items.add(command);
-        items.add(parentActivity.ObdCommand(command));
-        itemsAdapter.notifyDataSetChanged();
+        adapter.addCommand(command);
+        adapter.addCommand(parentActivity.ObdCommand(command));
+        adapter.notifyDataSetChanged();
     }
 
     // TODO: Rename method, update argument and hook method into UI event

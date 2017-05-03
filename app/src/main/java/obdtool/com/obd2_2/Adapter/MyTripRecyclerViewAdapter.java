@@ -4,10 +4,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import obdtool.com.obd2_2.Fragment.TripFragment;
 import obdtool.com.obd2_2.R;
+import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.Trip;
 
 import java.util.ArrayList;
@@ -40,6 +43,12 @@ public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecycl
         holder.mItem = mValues.get(position);
         holder.mIdView.setText(Integer.toString(mValues.get(position).getID_trip()));
         holder.mContentView.setText(mValues.get(position).getStart_time().toString());
+        holder.mDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DbHandler.deleteTrip(holder.mItem);
+            }
+        });
 
         holder.mView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -61,10 +70,11 @@ public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecycl
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mContentView;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
+        final TextView mIdView;
+        final TextView mContentView;
+        final ImageButton mDelete;
         public Trip mItem;
 
         public ViewHolder(View view) {
@@ -72,6 +82,7 @@ public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecycl
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);
             mContentView = (TextView) view.findViewById(R.id.content);
+            mDelete = (ImageButton) view.findViewById(R.id.btnDeleteTrip);
         }
 
         @Override
