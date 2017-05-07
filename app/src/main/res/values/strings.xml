@@ -55,7 +55,7 @@
     <string name="acceleration">Acceleration</string>
     <string name="terminal">Terminal</string>
     <string name="preferences">Preferences</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main2">OBD2Tool</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -85,6 +85,9 @@
     <string name="finish">Finish</string>
     <string name="stop">Stop</string>
     <string name="stopwatch_default">00.000</string>
+    <string name="vehicle">Vehicle</string>
+    <string name="to">To</string>
+    <string name="delimiter">-</string>
 
 
 </resources>

@@ -43,7 +43,10 @@ public class AccelerationRecyclerViewAdapter extends RecyclerView.Adapter<Accele
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         holder.mItem = mValues.get(position);
         holder.mID.setText(Integer.toString(position));
-        holder.mTime.setText(mValues.get(position).getTimestamp().toString());
+        double time = mValues.get(position).getData();
+        int sec = (int)Math.floor(time/1000);
+        int ms = (int)time - (sec*1000);
+        holder.mTime.setText(sec+"."+ms);
         holder.mVehicle.setText("Def");//mValues.get(position).getVehicle_ID().getName());
         holder.mFrom.setText(Integer.toString(mValues.get(position).getFrom()));
         holder.mTo.setText(Integer.toString(mValues.get(position).getTo()));

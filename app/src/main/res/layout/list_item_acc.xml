@@ -28,7 +28,7 @@
         android:layout_toEndOf="@id/txt_acc_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Veh"/>
+        android:text="@string/vehicle"/>
 
     <TextView
         android:id="@+id/txtFrom"
@@ -36,15 +36,23 @@
         android:layout_toEndOf="@id/txt_acc_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="From"/>
+        android:text="@string/from"/>
+
+    <TextView
+        android:id="@+id/txtDelimiter"
+        android:layout_below="@id/txtVeh"
+        android:layout_toEndOf="@id/txtFrom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delimiter"/>
 
     <TextView
         android:id="@+id/txtTo"
-        android:layout_toEndOf="@id/txtFrom"
+        android:layout_toEndOf="@id/txtDelimiter"
         android:layout_below="@id/txtVeh"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="To"/>
+        android:text="@string/to"/>
 
     <ImageButton
         android:id="@+id/btnDeleteAcc"

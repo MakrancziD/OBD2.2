@@ -26,6 +26,7 @@
             android:layout_marginStart="50dp"/>
 
         <ImageView
+            android:id="@+id/milLamp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
@@ -33,18 +34,11 @@
 
     </RelativeLayout>
 
-    <TextView
-        android:text="ASD"
-        android:layout_below="@id/layout_DTC_num"
-        android:id="@+id/tests"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <ListView
         android:id="@+id/list_DTC"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tests"/>
+        android:layout_below="@id/layout_DTC_num"/>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btn_clear"
@@ -53,5 +47,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
         android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_delete_black" />
+        app:srcCompat="@drawable/ic_delete_black"
+        app:backgroundTint="@color/colorPrimary"
+        android:tint="@color/white"/>
 </RelativeLayout>

@@ -2,6 +2,7 @@ package obdtool.com.obd2_2.Fragment;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.SensorEvent;
 import android.location.Location;
 import android.net.Uri;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -34,11 +36,12 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
     private OnFragmentInteractionListener mListener;
     private MainActivity parentActivity;
 
-    private TextView milOn;
     private TextView dtcCnt;
     private ListView dtcList;
     private FloatingActionButton btnClear;
-    private TextView testResults;
+    private ImageView milLamp;
+
+    private boolean milOn = false;
 
     private MonitorStatusCommand currentMonitorStatus;
     private TroubleCodesCommand currentDTCs;
@@ -66,11 +69,10 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_diagnostic, container, false);
-        //milOn = (TextView) v.findViewById(R.id.mil_status);
+        milLamp = (ImageView) v.findViewById(R.id.milLamp);
         dtcCnt = (TextView) v.findViewById(R.id.dtc_cnt);
         dtcList = (ListView) v.findViewById(R.id.list_DTC);
         btnClear = (FloatingActionButton) v.findViewById(R.id.btn_clear);
-        testResults = (TextView) v.findViewById(R.id.tests);
 
         dtcAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, itemsDTC);
         dtcList.setAdapter(dtcAdapter);
@@ -155,12 +157,20 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
 
         private void refreshView()
         {
-            milOn.setText(currentMonitorStatus.isMilOn()?R.string.on:R.string.off);
+            milOn = currentMonitorStatus.isMilOn();
             dtcCnt.setText(Integer.toString(currentMonitorStatus.getNumOfDTCs()));
-            testResults.setText(currentMonitorStatus.getCalculatedResult());
             itemsDTC.clear();
             itemsDTC.addAll(Arrays.asList(currentDTCs.getCalculatedResult().split("\n")));
             dtcAdapter.notifyDataSetChanged();
+
+            if(milOn) {
+                milLamp.setColorFilter(Color.argb(255, 255, 165, 00));
+            }
+            else {
+                milLamp.setColorFilter(Color.BLACK);
+            }
+
+            milLamp.setColorFilter(Color.argb(255, 255, 165, 00));
         }
     }
 }

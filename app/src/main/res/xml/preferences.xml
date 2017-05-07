@@ -13,11 +13,17 @@
             android:key="list_preference_veh" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/timings">
-        <!--<obdtool.com.obd2_2.util.NumberPickerPreference-->
-            <!--android:title="@string/obdRate"-->
-            <!--android:key="obd_rate" />-->
-        <!--<obdtool.com.obd2_2.util.NumberPickerPreference-->
-            <!--android:title="@string/sensorRate"-->
-            <!--android:key="sensor_rate" />-->
+        <ListPreference
+            android:defaultValue="100"
+            android:title="OBD queuing interval"
+            android:key="list_preference_obd_timing" />
+        <ListPreference
+            android:defaultValue="100"
+            android:title="Sensor refresh interval"
+            android:key="list_preference_sensor_timing" />
+        <ListPreference
+            android:defaultValue="100"
+            android:title="GPS minimum distance"
+            android:key="list_preference_sensor_timing" />
     </PreferenceCategory>
 </PreferenceScreen>

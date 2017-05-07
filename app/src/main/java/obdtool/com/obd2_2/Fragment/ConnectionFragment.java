@@ -29,7 +29,6 @@ import obdtool.com.obd2_2.util.ReceiverFragment;
 public class ConnectionFragment extends Fragment implements ReceiverFragment {
 
     private OnFragmentInteractionListener mListener;
-    private TextView connectionStatus;
     private Button btnBt;
     private Spinner vehSpinner;
     private MainActivity parentActivity;
@@ -71,10 +70,6 @@ public class ConnectionFragment extends Fragment implements ReceiverFragment {
 
             }
         });
-
-        connectionStatus=(TextView)view.findViewById(R.id.connectionStatus);
-
-
 
         btnBt =(Button)view.findViewById(R.id.btnBluetooth);
 
