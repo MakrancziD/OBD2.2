@@ -8,11 +8,7 @@ import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v7.preference.ListPreference;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.github.pires.obd.commands.ObdCommand;
 import com.google.gson.Gson;
@@ -20,7 +16,6 @@ import com.google.gson.reflect.TypeToken;
 import com.takisoft.fix.support.v7.preference.PreferenceFragmentCompat;
 
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -28,7 +23,6 @@ import java.util.Set;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.Vehicle;
-import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
 public class PreferencesFragment extends PreferenceFragmentCompat implements ReceiverFragment {
@@ -116,17 +110,18 @@ public class PreferencesFragment extends PreferenceFragmentCompat implements Rec
         Type setType = new TypeToken<HashSet<BluetoothDevice>>(){}.getType();
         Set<BluetoothDevice> devList = gson.fromJson(sharedPreferences.getString(DEVICES, null), setType);
 
-        CharSequence[] entries = new CharSequence[devList.size()];
-        CharSequence[] entryValues = new CharSequence[devList.size()];
-        int i = 0;
-        for(BluetoothDevice dev : devList)
-        {
-            entries[i] = i+". "+dev.getName()+" - "+dev.getAddress();
-            entryValues[i] = gson.toJson(dev);
-            i++;
+        if(devList!=null) {
+            CharSequence[] entries = new CharSequence[devList.size()];
+            CharSequence[] entryValues = new CharSequence[devList.size()];
+            int i = 0;
+            for (BluetoothDevice dev : devList) {
+                entries[i] = i + ". " + dev.getName() + " - " + dev.getAddress();
+                entryValues[i] = gson.toJson(dev);
+                i++;
+            }
+            lp.setEntries(entries);
+            lp.setEntryValues(entryValues);
         }
-        lp.setEntries(entries);
-        lp.setEntryValues(entryValues);
     }
 
     protected void setVehiclePreferenceData(ListPreference lp)

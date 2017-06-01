@@ -1,15 +1,12 @@
 package obdtool.com.obd2_2.Fragment;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.SensorEvent;
 import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +14,6 @@ import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.github.pires.obd.commands.ObdCommand;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,12 +25,10 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
-import com.jjoe64.graphview.series.DataPointInterface;
 import com.jjoe64.graphview.series.LineGraphSeries;
 import com.jjoe64.graphview.series.Series;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -45,7 +39,6 @@ import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.ObdEntry;
 import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
-import obdtool.com.obd2_2.service.LocationService;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
 public class TripDetailsFragment extends Fragment implements ReceiverFragment, OnMapReadyCallback {
@@ -273,48 +266,30 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
 
     @Override
     public void onMapReady(GoogleMap googleMap) {
-        LatLng work = new LatLng(48.104148, 20.788725);
         LatLng home = new LatLng(47.975956, 20.731853);
 
         PolylineOptions options = new PolylineOptions();
         options.color( Color.parseColor( "#CC0000FF" ) );
         options.width( 5 );
         options.visible( true );
-        options.add(home);
-        options.add(work);
 
+        List<SensorEntry> gpsEntries = DbHandler.getGpsEntriesOfTrip(trip);
+        if(gpsEntries!=null) {
+            for (SensorEntry gps : gpsEntries) {
+                options.add(new LatLng(gps.getData1(), gps.getData2()));
+            }
+        }
+        else {
+            options.add(home);
+        }
         googleMap.addPolyline( options );
 
-//        List<String> providers = locationManager.getProviders(true);
-//        Location l = null;
-//        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-//        {
-//            for (String provider : providers) {
-//                l = locationManager.getLastKnownLocation(provider);
-//                if(l!=null)
-//                    break;
-//            }
-//            if(l!=null)
-//            {
-//                lat = l.getLatitude();
-//                lon = l.getLongitude();
-//            }
-//        }
-
-
-        //googleMap.setMyLocationEnabled(true);
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(home, 13));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(options.getPoints().get(0), 13));
         googleMap.addMarker(new MarkerOptions()
-                    .title("Home")
-                    .position(home));
+                    .title("Start")
+                    .position(options.getPoints().get(0)));
         googleMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mapView.onResume();
-    }
-
-    private void drawPrimaryLinePath( ArrayList<LatLng> latLonList )
-    {
-
-
     }
 
     public interface OnFragmentInteractionListener {

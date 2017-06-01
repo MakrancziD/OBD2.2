@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import obdtool.com.obd2_2.Fragment.TripFragment;
@@ -75,9 +74,9 @@ public class MyTripRecyclerViewAdapter extends RecyclerView.Adapter<MyTripRecycl
         final TextView mIdView;
         final TextView mContentView;
         final ImageButton mDelete;
-        public Trip mItem;
+        Trip mItem;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.id);

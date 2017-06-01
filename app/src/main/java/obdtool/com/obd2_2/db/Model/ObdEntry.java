@@ -5,21 +5,17 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-/**
- * Created by Maki on 2017. 03. 27..
- */
-
 @DatabaseTable(tableName = ObdEntry.TABLE_NAME)
 public class ObdEntry {
 
-    public static final String TABLE_NAME = "obd_entry";
+    static final String TABLE_NAME = "obd_entry";
 
-    public static final String FIELD_NAME_ID = "ID_obd_entry";
-    public static final String FIELD_NAME_TIMESTAMP = "timestamp";
-    public static final String FIELD_NAME_REQ = "request";
-    public static final String FIELD_NAME_RESPONSE = "response";
-    public static final String FIELD_NAME_FORMATTED_DATA = "formatted_data";
-    public static final String FIELD_NAME_TRIP_ID = "trip_ID";
+    private static final String FIELD_NAME_ID = "ID_obd_entry";
+    private static final String FIELD_NAME_TIMESTAMP = "timestamp";
+    private static final String FIELD_NAME_REQ = "request";
+    private static final String FIELD_NAME_RESPONSE = "response";
+    private static final String FIELD_NAME_FORMATTED_DATA = "formatted_data";
+    private static final String FIELD_NAME_TRIP_ID = "trip_ID";
 
     @DatabaseField(columnName = FIELD_NAME_ID, generatedId = true)
     private int ID_obd_entry;

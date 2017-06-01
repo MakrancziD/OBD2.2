@@ -5,11 +5,6 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.field.ForeignCollectionField;
 import com.j256.ormlite.table.DatabaseTable;
 
-
-/**
- * Created by Maki on 2017. 03. 27..
- */
-
 @DatabaseTable(tableName = Vehicle.TABLE_NAME)
 public class Vehicle {
 

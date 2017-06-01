@@ -10,10 +10,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.github.pires.obd.commands.ObdCommand;
 
@@ -56,8 +54,6 @@ public class TerminalFragment extends Fragment implements ReceiverFragment {
         adapter = new TerminalRecyclerViewAdapter(items);
         terminalView.setAdapter(adapter);
 
-//        itemsAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, items);
-//        terminalView.setAdapter(itemsAdapter);
         editCommand=(EditText)view.findViewById(R.id.customCommand);
         btnSend=(Button) view.findViewById(R.id.btn_send);
         btnSend.setOnClickListener(new View.OnClickListener() {

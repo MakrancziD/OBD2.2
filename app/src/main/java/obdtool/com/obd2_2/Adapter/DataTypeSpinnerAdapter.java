@@ -18,10 +18,6 @@ import java.util.List;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.util.DataTypeItem;
 
-/**
- * Created by Maki on 2017. 05. 02..
- */
-
 public class DataTypeSpinnerAdapter extends ArrayAdapter<DataTypeItem> {
 
     private Context ctx;

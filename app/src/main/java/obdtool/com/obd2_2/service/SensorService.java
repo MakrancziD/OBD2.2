@@ -18,10 +18,6 @@ import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
 
-/**
- * Created by Maki on 2017. 04. 18..
- */
-
 public class SensorService extends Service implements SensorEventListener {
 
     private SensorManager sensorManager;
@@ -29,7 +25,7 @@ public class SensorService extends Service implements SensorEventListener {
     private Context context;
 
     private long lastUpdate;
-    private int updateInterval=1000; //TODO: Shared Pref
+    private int updateInterval=1000;
 
     private Boolean isRunning=false;
 

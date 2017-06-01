@@ -26,12 +26,6 @@ import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.Vehicle;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
-/**
- * A fragment representing a list of Items.
- * <p/>
- * Activities containing this fragment MUST implement the {@link OnListFragmentInteractionListener}
- * interface.
- */
 public class VehicleListFragment extends Fragment implements ReceiverFragment {
 
     private static final String ARG_COLUMN_COUNT = "column-count";

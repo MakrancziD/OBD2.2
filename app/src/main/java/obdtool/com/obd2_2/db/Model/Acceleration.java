@@ -4,19 +4,15 @@ import com.j256.ormlite.field.DatabaseField;
 
 import java.util.Date;
 
-/**
- * Created by Maki on 2017. 04. 18..
- */
-
 public class Acceleration {
     public static final String TABLE_NAME = "acceleration";
 
-    public static final String FIELD_NAME_ID = "ID_acceleration";
-    public static final String FIELD_NAME_TIMESTAMP = "timestamp";
-    public static final String FIELD_NAME_FROM = "from";
-    public static final String FIELD_NAME_TO = "to";
-    public static final String FIELD_NAME_DATA = "data";
-    public static final String FIELD_NAME_VEHICLE = "vehicle_ID";
+    private static final String FIELD_NAME_ID = "ID_acceleration";
+    private static final String FIELD_NAME_TIMESTAMP = "timestamp";
+    private static final String FIELD_NAME_FROM = "from";
+    private static final String FIELD_NAME_TO = "to";
+    private static final String FIELD_NAME_DATA = "data";
+    private static final String FIELD_NAME_VEHICLE = "vehicle_ID";
 
     @DatabaseField(columnName = FIELD_NAME_ID)
     private int ID_acceleration;

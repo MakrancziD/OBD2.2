@@ -120,16 +120,16 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
         return mValues.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        public final View mView;
-        public final TextView mIdView;
-        public final TextView mNameView;
-        public final TextView mMakeModelView;
-        public final ImageButton mBtnEdit;
-        public final ImageButton mBtnDelete;
-        public Vehicle mItem;
+    class ViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
+        final TextView mIdView;
+        final TextView mNameView;
+        final TextView mMakeModelView;
+        final ImageButton mBtnEdit;
+        final ImageButton mBtnDelete;
+        Vehicle mItem;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             mView = view;
             mIdView = (TextView) view.findViewById(R.id.veh_id);

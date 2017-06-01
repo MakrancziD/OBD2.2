@@ -10,10 +10,6 @@ import java.io.IOException;
 import java.util.Set;
 import java.util.UUID;
 
-/**
- * Created by Maki on 2017. 01. 29..
- */
-
 public class BluetoothManager {
     private static final BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
     private static final String TAG = BluetoothManager.class.getName();
@@ -63,19 +59,4 @@ public class BluetoothManager {
         BluetoothManager.btDevice = btDevice;
     }
 
-
-//    public static BluetoothSocket getSocket() {
-//        return socket;
-//    }
-//
-//    public static boolean CloseConnection() {
-//        try {
-//            socket.close();
-//            socket=null;
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return false;
-//        }
-//        return true;
-//    }
 }

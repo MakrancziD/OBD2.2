@@ -1,7 +1,5 @@
 package obdtool.com.obd2_2.service;
 
-import android.Manifest;
-import android.annotation.TargetApi;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -14,16 +12,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 
 import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.db.DbHandler;
-
-/**
- * Created by Maki on 2017. 03. 31..
- */
 
 public class LocationService extends Service implements LocationListener {
 
@@ -42,11 +35,6 @@ public class LocationService extends Service implements LocationListener {
     private Context context;
 
     private boolean isRunning=false;
-
-//    public LocationService(Context context) {
-//        this.mContext = context;
-//        getLocation();
-//    }
 
     public LocationService(){}
 

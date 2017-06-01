@@ -15,16 +15,12 @@ import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
 import obdtool.com.obd2_2.db.Model.Vehicle;
 
-/**
- * Created by Maki on 2017. 03. 27..
- */
-
 public class DbHelper extends OrmLiteSqliteOpenHelper {
 
     private static final String DATABASE_NAME    = "ormlite.db";
     private static final int    DATABASE_VERSION = 6;
 
-    public DbHelper(Context context) {
+    DbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 

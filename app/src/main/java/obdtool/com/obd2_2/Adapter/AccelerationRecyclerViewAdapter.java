@@ -47,7 +47,8 @@ public class AccelerationRecyclerViewAdapter extends RecyclerView.Adapter<Accele
         int sec = (int)Math.floor(time/1000);
         int ms = (int)time - (sec*1000);
         holder.mTime.setText(sec+"."+ms);
-        holder.mVehicle.setText("Def");//mValues.get(position).getVehicle_ID().getName());
+        String vehicle = mValues.get(position).getVehicle_ID().getName();
+        holder.mVehicle.setText(vehicle==null?"Def":vehicle);
         holder.mFrom.setText(Integer.toString(mValues.get(position).getFrom()));
         holder.mTo.setText(Integer.toString(mValues.get(position).getTo()));
         holder.mDelete.setOnClickListener(new View.OnClickListener() {

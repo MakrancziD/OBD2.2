@@ -18,10 +18,6 @@ import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
 import obdtool.com.obd2_2.db.Model.Vehicle;
 
-/**
- * Created by Maki on 2017. 04. 09..
- */
-
 public class DbHandler {
 
     private static Dao<Vehicle, Integer> vehicleDao;
@@ -44,14 +40,6 @@ public class DbHandler {
             obdDao = db.getDao(ObdEntry.class);
             sensorDao = db.getDao(SensorEntry.class);
             accelerationDao = db.getDao(Acceleration.class);
-
-
-//            vehicleDao.create(new Vehicle("Batmobile"));
-//            Vehicle myVehicle = vehicleDao.queryForAll().get(0);
-//
-//            Date date = new Date();
-//            tripDao.create(new Trip(date, myVehicle));
-//            t=tripDao.queryForAll().get(0);
 
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
@@ -114,7 +102,6 @@ public class DbHandler {
         }
         try {
             obdDao.create(new ObdEntry(new Date(), cmd.getName(), cmd.getResult(), Double.parseDouble(cmd.getCalculatedResult()), getCurrentTrip()));
-            //TODO: batch store every minute?
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
         }
@@ -129,16 +116,6 @@ public class DbHandler {
         }
         return null;
     }
-
-//    public static List<ObdEntry> getTripData(Trip t)
-//    {
-//        try {
-//            return new ArrayList<ObdEntry>(tripDao.queryForId(t).getObdEntries());
-//        } catch (SQLException e) {
-//            Log.e(COMP, e.getMessage());
-//        }
-//        return null;
-//    }
 
     public static void storeGpsEntry(Location entry)
     {
@@ -276,5 +253,14 @@ public class DbHandler {
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
         }
+    }
+
+    public static List<SensorEntry> getGpsEntriesOfTrip(Trip t) {
+        try {
+            sensorDao.queryBuilder().where().eq("trip_ID", t.getID_trip()).and().eq("sensor", "GPS");
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        return null;
     }
 }

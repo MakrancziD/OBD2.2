@@ -1,9 +1,5 @@
 package obdtool.com.obd2_2.util;
 
-/**
- * Created by Maki on 2017. 05. 02..
- */
-
 public class DataTypeItem {
 
     private String type;

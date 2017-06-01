@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -142,9 +141,6 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
         protected String doInBackground(String... params) {
             currentMonitorStatus = (MonitorStatusCommand) parentActivity.ObdCommand(new MonitorStatusCommand());
             currentDTCs = (TroubleCodesCommand) parentActivity.ObdCommand(new TroubleCodesCommand());
-
-            String fuelSys = parentActivity.ObdCommand("01 03");
-
             return "?";
         }
 
@@ -164,13 +160,11 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
             dtcAdapter.notifyDataSetChanged();
 
             if(milOn) {
-                milLamp.setColorFilter(Color.argb(255, 255, 165, 00));
+                milLamp.setColorFilter(Color.argb(255, 255, 165, 0));
             }
             else {
                 milLamp.setColorFilter(Color.BLACK);
             }
-
-            milLamp.setColorFilter(Color.argb(255, 255, 165, 00));
         }
     }
 }

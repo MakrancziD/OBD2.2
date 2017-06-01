@@ -8,7 +8,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentTransaction;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
@@ -37,7 +36,6 @@ import android.widget.ArrayAdapter;
 import com.github.pires.obd.commands.ObdCommand;
 import com.google.gson.Gson;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +80,7 @@ public class MainActivity extends AppCompatActivity
     private boolean isObdServiceBound;
     private boolean isLocationServiceBound;
     private boolean isSensorServiceBound;
-    private static final String COMP = MainActivityOld.class.getName();
+    private static final String COMP = MainActivity.class.getName();
     private ObdService obdService;
     private LocationService locationService;
     private SensorService sensorService;
@@ -93,12 +91,10 @@ public class MainActivity extends AppCompatActivity
     private SharedPreferences sharedPreferences;
     private ReceiverFragment currentFragment;
 
-    private Gson gson = new Gson();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -121,11 +117,6 @@ public class MainActivity extends AppCompatActivity
         doBindSensorService();
         CheckBluetoothAdapter();
 
-
-        //DEBUG
-//        List<ObdEntry> obdE = DbHandler.getAllObdEntries();
-//        List<SensorEntry> sensE = DbHandler.getAllSensorEntries();
-//        int i = 0;
     }
 
     private void TryConnectDefaultBtDevice() {
@@ -151,7 +142,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main2, menu);
+        getMenuInflater().inflate(R.menu.main, menu);
         return true;
     }
 
@@ -374,7 +365,10 @@ public class MainActivity extends AppCompatActivity
         List<String> deviceInfo = new ArrayList<>();
 
         final List<BluetoothDevice> pairedDevices = new ArrayList<>();
-        pairedDevices.addAll(BluetoothManager.GetBtDevices());
+        Set<BluetoothDevice> devices = BluetoothManager.GetBtDevices();
+        if(devices!=null) {
+            pairedDevices.addAll(devices);
+        }
 
         if (pairedDevices.size() > 0) {
             for (BluetoothDevice device : pairedDevices) {
@@ -444,20 +438,6 @@ public class MainActivity extends AppCompatActivity
         ObdCommandJob job = new ObdCommandJob(command);
         job = obdService.executeCommand(job);
         return job.getCommand();
-    }
-
-    public String ObdRawCommand(String command)
-    {
-        BluetoothSocket socket = obdService.getBtSocket();
-        ObdCommand job = new CustomObdCommand(command);
-        try {
-            job.run(socket.getInputStream(), socket.getOutputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        return job.getResult();
     }
 
     public void enableQueue(boolean q)

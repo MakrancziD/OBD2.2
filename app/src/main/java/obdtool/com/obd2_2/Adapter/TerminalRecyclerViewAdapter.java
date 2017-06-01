@@ -11,10 +11,6 @@ import java.util.List;
 
 import obdtool.com.obd2_2.R;
 
-/**
- * Created by Maki on 2017. 05. 04..
- */
-
 public class TerminalRecyclerViewAdapter extends RecyclerView.Adapter<TerminalRecyclerViewAdapter.ViewHolder> {
 
     private List<String> mCommands;
@@ -53,7 +49,7 @@ public class TerminalRecyclerViewAdapter extends RecyclerView.Adapter<TerminalRe
         View mView;
         TextView mCommand;
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
             mCommand = (TextView) itemView.findViewById(R.id.txtTerminalCmd);

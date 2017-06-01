@@ -186,7 +186,6 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
 
     @Override
     public void update(ObdCommand cmd) {
-        //if(cmd instanceof SpeedCommand) {
             txtSpeed.setText(((SpeedCommand) cmd).getMetricSpeed());
 
         if(isStarted) {

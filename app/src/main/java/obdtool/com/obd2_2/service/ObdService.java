@@ -1,7 +1,6 @@
 package obdtool.com.obd2_2.service;
 
 import android.app.Notification;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
@@ -29,14 +28,9 @@ import java.util.List;
 
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
-import obdtool.com.obd2_2.activity.MainActivityOld;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.util.BluetoothManager;
 import obdtool.com.obd2_2.util.ObdCommandJob;
-
-/**
- * Created by Maki on 2017. 03. 22..
- */
 
 public class ObdService extends GatewayService {
 
@@ -173,7 +167,6 @@ public class ObdService extends GatewayService {
             }
 
             DbHandler.storeObd(job.getCommand());
-            //store response, update UI
         }
     }
 
@@ -204,7 +197,6 @@ public class ObdService extends GatewayService {
 
         //notificationManager.cancel(NOTIFICATION_ID);
         queue.clear();
-        //isRunning = false;
 
         if (getBtSocket() != null) {
             try {
@@ -270,7 +262,6 @@ public class ObdService extends GatewayService {
                 .setContentText(contentText).setSmallIcon(icon)
                 .setContentIntent(contentIntent)
                 .setWhen(System.currentTimeMillis());
-        // can cancel?
         if (ongoing) {
             notificationBuilder.setOngoing(true);
         } else {

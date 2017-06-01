@@ -4,22 +4,18 @@ import com.j256.ormlite.field.DatabaseField;
 
 import java.util.Date;
 
-/**
- * Created by Maki on 2017. 03. 27..
- */
-
 public class SensorEntry {
 
     public static final String TABLE_NAME = "sensor_entry";
 
-    public static final String FIELD_NAME_ID = "ID_sensor_entry";
-    public static final String FIELD_NAME_SENSOR = "sensor";
-    public static final String FIELD_NAME_TIMESTAMP = "timestamp";
-    public static final String FIELD_NAME_DATA_1 = "data1";
-    public static final String FIELD_NAME_DATA_2 = "data2";
-    public static final String FIELD_NAME_DATA_3 = "data3";
-    public static final String FIELD_NAME_DATA_4 = "data4";
-    public static final String FIELD_NAME_TRIP = "trip_ID";
+    private static final String FIELD_NAME_ID = "ID_sensor_entry";
+    private static final String FIELD_NAME_SENSOR = "sensor";
+    private static final String FIELD_NAME_TIMESTAMP = "timestamp";
+    private static final String FIELD_NAME_DATA_1 = "data1";
+    private static final String FIELD_NAME_DATA_2 = "data2";
+    private static final String FIELD_NAME_DATA_3 = "data3";
+    private static final String FIELD_NAME_DATA_4 = "data4";
+    private static final String FIELD_NAME_TRIP = "trip_ID";
 
     @DatabaseField(columnName = FIELD_NAME_ID)
     private int ID_sensor_entry;

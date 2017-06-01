@@ -22,17 +22,14 @@ import obdtool.com.obd2_2.util.ReceiverFragment;
 
 public class TripFragment extends Fragment implements ReceiverFragment {
 
-    // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
-    // TODO: Customize parameters
     private int mColumnCount = 1;
     private OnListFragmentInteractionListener mListener;
 
     public TripFragment() {
     }
 
-    // TODO: Customize parameter initialization
-    @SuppressWarnings("unused")
+
     public static TripFragment newInstance(int columnCount) {
         TripFragment fragment = new TripFragment();
         Bundle args = new Bundle();

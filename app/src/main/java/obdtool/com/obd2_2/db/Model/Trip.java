@@ -7,21 +7,17 @@ import com.j256.ormlite.table.DatabaseTable;
 
 import java.util.Date;
 
-/**
- * Created by Maki on 2017. 03. 27..
- */
-
 @DatabaseTable(tableName = Trip.TABLE_NAME)
 public class Trip {
 
-    public static final String TABLE_NAME = "trip";
+    static final String TABLE_NAME = "trip";
 
-    public static final String FIELD_NAME_ID = "ID_trip";
-    public static final String FIELD_NAME_START = "start_time";
-    public static final String FIELD_NAME_END = "end_time";
-    public static final String FIELD_NAME_VEHICLE = "vehicle_ID";
-    public static final String FIELD_NAME_OBD_ENTRIES = "obd_entries";
-    public static final String FIELD_NAME_SENSOR_ENTRIES = "sensor_entries";
+    private static final String FIELD_NAME_ID = "ID_trip";
+    private static final String FIELD_NAME_START = "start_time";
+    private static final String FIELD_NAME_END = "end_time";
+    private static final String FIELD_NAME_VEHICLE = "vehicle_ID";
+    private static final String FIELD_NAME_OBD_ENTRIES = "obd_entries";
+    private static final String FIELD_NAME_SENSOR_ENTRIES = "sensor_entries";
 
     @DatabaseField(columnName = FIELD_NAME_ID, generatedId = true)
     private int ID_trip;

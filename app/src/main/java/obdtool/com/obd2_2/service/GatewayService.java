@@ -9,14 +9,10 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import obdtool.com.obd2_2.util.ObdCommandJob;
 
-/**
- * Created by Maki on 2017. 03. 25..
- */
 
 public abstract class GatewayService extends Service {
 
