@@ -1,19 +1,13 @@
 package obdtool.com.obd2_2.Fragment;
 
-import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,7 +21,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -46,7 +39,6 @@ import obdtool.com.obd2_2.Adapter.DataTypeSpinnerAdapter;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.db.DbHandler;
-import obdtool.com.obd2_2.service.LocationService;
 import obdtool.com.obd2_2.util.DataTypeItem;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
