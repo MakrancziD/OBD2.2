@@ -21,7 +21,6 @@ import obdtool.com.obd2_2.db.DbHandler;
 public class LocationService extends Service implements LocationListener {
 
     boolean isGPSEnabled = false;
-    boolean isNetworkEnabled = false;
     boolean canGetLocation = false;
 
     Location location;
@@ -41,8 +40,7 @@ public class LocationService extends Service implements LocationListener {
     public Location getLocation() {
         try {
             if (Build.VERSION.SDK_INT >= 23 &&
-                    ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                    ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             }
 
                 locationManager = (LocationManager) context
@@ -51,29 +49,10 @@ public class LocationService extends Service implements LocationListener {
                 isGPSEnabled = locationManager
                         .isProviderEnabled(LocationManager.GPS_PROVIDER);
 
-                isNetworkEnabled = locationManager
-                        .isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-
-                if (!isGPSEnabled && !isNetworkEnabled) {
+                if (!isGPSEnabled) {
                     // no network provider is enabled
                 } else {
                     this.canGetLocation = true;
-                    // First get location from Network Provider
-                    if (isNetworkEnabled) {
-                        locationManager.requestLocationUpdates(
-                                LocationManager.NETWORK_PROVIDER,
-                                MIN_TIME_BW_UPDATES,
-                                MIN_DISTANCE_CHANGE_FOR_UPDATES, this);
-                        Log.d("Network", "Network");
-                        if (locationManager != null) {
-                            location = locationManager
-                                    .getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-                            if (location != null) {
-                                latitude = location.getLatitude();
-                                longitude = location.getLongitude();
-                            }
-                        }
-                    }
                     // if GPS Enabled get lat/long using GPS Services
                     if (isGPSEnabled) {
                         if (location == null) {

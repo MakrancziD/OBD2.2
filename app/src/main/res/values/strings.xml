@@ -88,6 +88,8 @@
     <string name="vehicle">Vehicle</string>
     <string name="to">To</string>
     <string name="delimiter">-</string>
+    <string name="select_data">Select data to monitor!</string>
+    <string name="btn_stop">Stop</string>
 
 
 </resources>

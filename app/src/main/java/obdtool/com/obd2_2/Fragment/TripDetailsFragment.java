@@ -39,6 +39,7 @@ import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.ObdEntry;
 import obdtool.com.obd2_2.db.Model.SensorEntry;
 import obdtool.com.obd2_2.db.Model.Trip;
+import obdtool.com.obd2_2.util.LiveDataPoint;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 
 public class TripDetailsFragment extends Fragment implements ReceiverFragment, OnMapReadyCallback {
@@ -49,12 +50,15 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
     private Trip trip;
     private Date tripStart;
 
-    private Map<String, List<ObdEntry>> obdMap = new HashMap<>();
-    private Map<String, List<SensorEntry>> sensorMap = new HashMap<>();
+    private Map<String, List<LiveDataPoint>> dataMap = new HashMap<>();
     private Map<String, LineGraphSeries<DataPoint>> graphMap = new HashMap<>();
     private GraphView graph;
     private MapView mapView;
     private LocationManager locationManager;
+
+    private final String ACC_X = "Accelerometer - X";
+    private final String ACC_Y = "Accelerometer - Y";
+    private final String ACC_Z = "Accelerometer - Z";
 
     private OnFragmentInteractionListener mListener;
 
@@ -91,25 +95,49 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
         List<ObdEntry> data = new ArrayList<>(trip.getObdEntries());
 
         for (ObdEntry e : data) {
-            List<ObdEntry> value = obdMap.get(e.getRequest());
+            List<LiveDataPoint> value = dataMap.get(e.getRequest());
             if (value == null) {
-                obdMap.put(e.getRequest(), new ArrayList<ObdEntry>());
-                value = obdMap.get(e.getRequest());
+                dataMap.put(e.getRequest(), new ArrayList<LiveDataPoint>());
+                value = dataMap.get(e.getRequest());
             }
-            value.add(e);
+            value.add(new LiveDataPoint(e.getFormatted_data(), e.getTimestamp()));
         }
     }
 
     private void fillSensorMap() {
         List<SensorEntry> data = new ArrayList<>(trip.getSensorEntries());
 
-        for (SensorEntry e : data) {
-            List<SensorEntry> value = sensorMap.get(e.getSensor());
-            if (value == null) {
-                sensorMap.put(e.getSensor(), new ArrayList<SensorEntry>());
-                value = sensorMap.get(e.getSensor());
+        List<LiveDataPoint> acc_X = null;
+        List<LiveDataPoint> acc_Y = null;
+        List<LiveDataPoint> acc_Z = null;
+
+        for(SensorEntry s : data) {
+            if(s.getSensor()!=null && s.getSensor().equals("Accelerometer")) {
+                acc_X = dataMap.get(ACC_X);
+                acc_Y = dataMap.get(ACC_Y);
+                acc_Z = dataMap.get(ACC_Z);
+                if(acc_X==null) {
+                    dataMap.put(ACC_X, new ArrayList<LiveDataPoint>());
+                    acc_X = dataMap.get(ACC_X);
+                }
+                if(acc_Y==null) {
+                    dataMap.put(ACC_Y, new ArrayList<LiveDataPoint>());
+                    acc_Y = dataMap.get(ACC_Y);
+                }
+                if(acc_Z==null) {
+                    dataMap.put(ACC_Z, new ArrayList<LiveDataPoint>());
+                    acc_Z = dataMap.get(ACC_Z);
+                }
+                break;
             }
-            value.add(e);
+        }
+
+        for (SensorEntry e : data) {
+            if(e.getSensor()!=null && e.getSensor().equals("Accelerometer")) {
+                acc_X.add(new LiveDataPoint(e.getData1(), e.getTimestamp()));
+                acc_Y.add(new LiveDataPoint(e.getData2(), e.getTimestamp()));
+                acc_Z.add(new LiveDataPoint(e.getData3(), e.getTimestamp()));
+            }
         }
     }
 
@@ -125,35 +153,14 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
 
         graph = (GraphView) v.findViewById(R.id.tripGraph);
         layoutChkbox = (LinearLayout) v.findViewById(R.id.checkbox_view);
+        populateCheckBoxView();
 
-        populateCheckBoxViewObd();
         return v;
     }
 
-    private void populateCheckBoxViewObd() {
-        if (obdMap != null) {
-            for (Map.Entry e : obdMap.entrySet()) {
-                final String eKey = e.getKey().toString();
-                CheckBox cb = new CheckBox(getContext());
-                cb.setText(eKey);
-                cb.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                    @Override
-                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                        if (isChecked) {
-                            addToGraph(eKey);
-                        } else {
-                            removeFromGraph(eKey);
-                        }
-                    }
-                });
-                layoutChkbox.addView(cb);
-            }
-        }
-    }
-
-    private void populateCheckBoxViewSensor() {
-        if (sensorMap != null) {
-            for (Map.Entry e : sensorMap.entrySet()) {
+    private void populateCheckBoxView() {
+        if (dataMap != null) {
+            for (Map.Entry e : dataMap.entrySet()) {
                 final String eKey = e.getKey().toString();
                 CheckBox cb = new CheckBox(getContext());
                 cb.setText(eKey);
@@ -176,11 +183,11 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
         if (graphMap.containsKey(entries)) {
             graph.addSeries(graphMap.get(entries));
         } else {
-            List<ObdEntry> entryList = obdMap.get(entries);
+            List<LiveDataPoint> entryList = dataMap.get(entries);
             DataPoint[] dataPointList = new DataPoint[entryList.size()];
             for (int i = 0; i<entryList.size(); i++) {
                 long diff = Math.abs(entryList.get(i).getTimestamp().getTime() - tripStart.getTime());
-                dataPointList[i] = new DataPoint(diff/1000, entryList.get(i).getFormatted_data());
+                dataPointList[i] = new DataPoint(diff/1000, entryList.get(i).getValue());
             }
             LineGraphSeries<DataPoint> series = new LineGraphSeries<>(dataPointList);
             graphMap.put(entries, series);
@@ -214,11 +221,11 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
 
     private String printData() {
         StringBuilder sb = new StringBuilder();
-        for (Map.Entry<String, List<ObdEntry>> e : obdMap.entrySet()) {
+        for (Map.Entry<String, List<LiveDataPoint>> e : dataMap.entrySet()) {
             sb.append(e.getKey());
             sb.append("\n");
-            for (ObdEntry oe : e.getValue()) {
-                sb.append(oe.getFormatted_data());
+            for (LiveDataPoint oe : e.getValue()) {
+                sb.append(oe);
                 sb.append("\n");
             }
             sb.append("\n");

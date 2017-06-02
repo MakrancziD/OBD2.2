@@ -3,6 +3,7 @@ package obdtool.com.obd2_2.Adapter;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
+import obdtool.com.obd2_2.Fragment.LiveFragment;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.util.DataTypeItem;
 
@@ -23,16 +25,23 @@ public class DataTypeSpinnerAdapter extends ArrayAdapter<DataTypeItem> {
     private Context ctx;
     private List<DataTypeItem> itemList;
     private boolean isFromView = false;
+    private LiveFragment fragment;
 
-    public DataTypeSpinnerAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<DataTypeItem> objects) {
+    public DataTypeSpinnerAdapter(@NonNull Context context, @LayoutRes int resource, @NonNull List<DataTypeItem> objects, LiveFragment fragment) {
         super(context, resource, objects);
         this.ctx=context;
         this.itemList = objects;
+        this.fragment=fragment;
     }
 
 
     @Override
     public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        return getCustomView(position, convertView, parent);
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
         return getCustomView(position, convertView, parent);
     }
 
@@ -68,9 +77,23 @@ public class DataTypeSpinnerAdapter extends ArrayAdapter<DataTypeItem> {
 
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int getPosition = (Integer) buttonView.getTag();
-
-
+                if (buttonView.isPressed()) {
+                    int getPosition = (Integer) buttonView.getTag();
+                    DataTypeItem item = itemList.get(getPosition);
+                    String command = itemList.get(getPosition).getType();
+                    if (!command.equals(ctx.getString(R.string.select_data))) {
+                        if (command.equals("Accelerometer")) {
+                            fragment.setAcc(isChecked);
+                        } else if (command.equals("GPS")) {
+                            fragment.setGps(isChecked);
+                        } else if (isChecked) {
+                            fragment.addCommand(command);
+                        } else {
+                            fragment.removeCommand(command);
+                        }
+                        item.setSelected(isChecked);
+                    }
+                }
             }
         });
         return convertView;

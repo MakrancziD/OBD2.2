@@ -57,7 +57,7 @@ public class SensorService extends Service implements SensorEventListener {
                 long curTime = System.currentTimeMillis();
 
                 if ((curTime - lastUpdate) > 100) {
-                    DbHandler.storeSensorResult(mySensor.getStringType(), new Date(event.timestamp), x, y, z, 0.0);
+                    DbHandler.storeSensorResult("Accelerometer", new Date(event.timestamp), x, y, z, 0.0);
                     lastUpdate = curTime;
                 }
 

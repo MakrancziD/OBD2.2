@@ -39,7 +39,7 @@ public class BluetoothManager {
 
     public static Set<BluetoothDevice> GetBtDevices()
     {
-        if(btAdapter.isEnabled()) {
+        if(btAdapter!=null && btAdapter.isEnabled()) {
             return getBtAdapter().getBondedDevices();
         }
         return null;

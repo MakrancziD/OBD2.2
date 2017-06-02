@@ -45,6 +45,7 @@ public class SensorEntry {
 
     public SensorEntry(String sensor, Date timestamp, double data1, double data2, double data3, double data4, Trip trip) {
         this.timestamp = timestamp;
+        this.sensor = sensor;
         this.data1 = data1;
         this.data2 = data2;
         this.data3 = data3;
