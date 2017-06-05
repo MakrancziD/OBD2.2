@@ -27,6 +27,7 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +69,8 @@ public class LiveFragment extends Fragment implements ReceiverFragment, OnMapRea
     private boolean liveRecording = false;
 
     List<ObdCommand> cmdList = new ArrayList<>();
+    private boolean accSelected=false;
+    private boolean gpsSelected = false;
 
     Map<String, ObdCommand> supportedObdList = new HashMap<>();
 
@@ -81,10 +84,10 @@ public class LiveFragment extends Fragment implements ReceiverFragment, OnMapRea
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         parentActivity = (MainActivity) getActivity();
-
-        cmdList.add(new SpeedCommand());
-        cmdList.add(new RPMCommand());
-        cmdList.add(new EngineCoolantTemperatureCommand());
+//
+//        cmdList.add(new SpeedCommand());
+//        cmdList.add(new RPMCommand());
+//        cmdList.add(new EngineCoolantTemperatureCommand());
         //TODO: dynamic command loading!
     }
 
@@ -115,8 +118,10 @@ public class LiveFragment extends Fragment implements ReceiverFragment, OnMapRea
             @Override
             public void onClick(View v) {
                 if (liveRecording) {
+                    btnStartStop.setText(R.string.start);
                     stopRecording();
                 } else {
+                    btnStartStop.setText(R.string.btn_stop);
                     startRecording();
                 }
             }
@@ -133,15 +138,18 @@ public class LiveFragment extends Fragment implements ReceiverFragment, OnMapRea
         if (spnDataType != null) {
             if (parentActivity != null) {
                 if (parentActivity.isObdServiceBound()) {
-                    PIDSupport support = new PIDSupport(PIDsupport.PID_01_20);
-                    for (ObdCommand cmd : support.getSupportedCommands()) {
-                        supportedObdList.put(cmd.getName(), cmd);
+                    PIDSupport support = (PIDSupport) parentActivity.ObdCommand(new PIDSupport(PIDsupport.PID_01_20));
+                    List<ObdCommand> supList = support.getSupportedCommands();
+                    for(int i=1;i<supList.size();i++) {
+                        ObdCommand daCmd = supList.get(i);
+                        supportedObdList.put(daCmd.getName(), daCmd);
                     }
+//                    for (ObdCommand icmd : supList) {
+//                        supportedObdList.put(icmd.getName(), icmd);
+//                    }
                 }
-//                if(parentActivity.isSensorServiceBound()) {
-//
-//                }
                 ArrayList<DataTypeItem> listSpinner = new ArrayList<>();
+                listSpinner.add(new DataTypeItem(getString(R.string.select_data)));
                 for (Map.Entry<String, ObdCommand> e : supportedObdList.entrySet()) {
                     DataTypeItem item = new DataTypeItem(e.getKey());
                     listSpinner.add(item);
@@ -150,8 +158,7 @@ public class LiveFragment extends Fragment implements ReceiverFragment, OnMapRea
                 listSpinner.add(new DataTypeItem("GPS"));
                 listSpinner.add(new DataTypeItem("Accelerometer"));
 
-                spinnerAdapter = new DataTypeSpinnerAdapter(parentActivity, 0, listSpinner);
-                spinnerAdapter.setDropDownViewResource(R.layout.live_spinner_item);
+                spinnerAdapter = new DataTypeSpinnerAdapter(parentActivity, 0, listSpinner, this);
                 spnDataType.setAdapter(spinnerAdapter);
             }
         }
@@ -163,8 +170,8 @@ public class LiveFragment extends Fragment implements ReceiverFragment, OnMapRea
         parentActivity.initLiveCommands(cmdList);
         DbHandler.startTrip();
         parentActivity.enableQueue(true);
-        parentActivity.enableLocation(true);
-        parentActivity.enableSensor(true);
+        parentActivity.enableLocation(gpsSelected);
+        parentActivity.enableSensor(accSelected);
         this.liveRecording = true;
     }
 
@@ -257,6 +264,28 @@ public class LiveFragment extends Fragment implements ReceiverFragment, OnMapRea
         gMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         mapView.onResume();
 
+    }
+
+    public void addCommand(String cmd) {
+        cmdList.add(supportedObdList.get(cmd));
+    }
+
+    public void removeCommand(String cmd) {
+        Iterator it = cmdList.iterator();
+        while(it.hasNext()) {
+            ObdCommand obdcmd = (ObdCommand) it.next();
+            if(obdcmd.getName().equals(cmd)) {
+                it.remove();
+            }
+        }
+    }
+
+    public void setAcc(boolean b) {
+        this.accSelected = b;
+    }
+
+    public void setGps(boolean b) {
+        this.gpsSelected = b;
     }
 
     public interface OnFragmentInteractionListener {

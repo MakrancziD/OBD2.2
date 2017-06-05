@@ -281,7 +281,7 @@ public class TripDetailsFragment extends Fragment implements ReceiverFragment, O
         options.visible( true );
 
         List<SensorEntry> gpsEntries = DbHandler.getGpsEntriesOfTrip(trip);
-        if(gpsEntries!=null) {
+        if(gpsEntries.size()>0) {
             for (SensorEntry gps : gpsEntries) {
                 options.add(new LatLng(gps.getData1(), gps.getData2()));
             }

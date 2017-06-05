@@ -38,7 +38,7 @@ public class PIDSupport extends ObdCommand {
         {
             if(chars[i]=='1')
             {
-                getSupportedCommands().add(CommandHelper.getCommandByPID(i));
+                supportedCommands.add(CommandHelper.getCommandByPID(i));
             }
         }
     }
