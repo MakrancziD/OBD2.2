@@ -257,7 +257,7 @@ public class DbHandler {
 
     public static List<SensorEntry> getGpsEntriesOfTrip(Trip t) {
         try {
-            sensorDao.queryBuilder().where().eq("trip_ID", t.getID_trip()).and().eq("sensor", "GPS");
+            return sensorDao.queryBuilder().where().eq("trip_ID", t.getID_trip()).and().eq("sensor", "GPS").query();
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
         }
