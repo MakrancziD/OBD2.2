@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.github.pires.obd.commands.ObdCommand;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.Where;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -258,6 +259,43 @@ public class DbHandler {
     public static List<SensorEntry> getGpsEntriesOfTrip(Trip t) {
         try {
             return sensorDao.queryBuilder().where().eq("trip_ID", t.getID_trip()).and().eq("sensor", "GPS").query();
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        return null;
+    }
+
+    public static List<Acceleration> getAccOfVeh(Vehicle veh) {
+        try {
+            return accelerationDao.queryBuilder().where().eq("vehicle_ID", veh.getID_vehicle()).query();
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        return null;
+    }
+
+    public static List<Acceleration> getAccByVehAndRange(Vehicle veh, String from, String to) {
+        try {
+            Where<Acceleration, Integer> i = accelerationDao.queryBuilder().where();
+            if(from!=null && to !=null) {
+                i.eq("from", from).and().eq("to", to);
+                if(veh!=null) {
+                    i.and();
+                }
+            }
+            if(veh!=null) {
+                i.eq("vehicle_ID", veh.getID_vehicle());
+            }
+            return i.query();
+        } catch (SQLException e) {
+            Log.e(COMP, e.getMessage());
+        }
+        return null;
+    }
+
+    public static Vehicle getVehByName(String name) {
+        try {
+            return vehicleDao.queryBuilder().where().eq("name", name).queryForFirst();
         } catch (SQLException e) {
             Log.e(COMP, e.getMessage());
         }

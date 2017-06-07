@@ -11,14 +11,20 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.NumberPicker;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.pires.obd.commands.ObdCommand;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import Commands.PID.SpeedCommand;
 import obdtool.com.obd2_2.Adapter.AccelerationRecyclerViewAdapter;
@@ -26,6 +32,7 @@ import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.activity.MainActivity;
 import obdtool.com.obd2_2.db.DbHandler;
 import obdtool.com.obd2_2.db.Model.Acceleration;
+import obdtool.com.obd2_2.db.Model.Vehicle;
 import obdtool.com.obd2_2.util.ReceiverFragment;
 import obdtool.com.obd2_2.util.Stopwatch;
 
@@ -40,6 +47,8 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
     private TextView txtTimer;
     private TextView txtSpeed;
     private RecyclerView listAcc;
+    private Spinner spnRange;
+    private Spinner spnVeh;
 
     private MainActivity parentActivity;
 
@@ -58,7 +67,17 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
     private boolean isRecording = false;
     private boolean isStarted = false;
 
-    //private int testSpeed=0;
+    private Vehicle currentVeh;
+    private String currentRange;
+
+    AccelerationRecyclerViewAdapter accListAdapter;
+    ArrayAdapter<String> rangeAdapter;
+    List<String> rangeList;
+    ArrayAdapter<String> vehAdapter;
+    List<String> vehList;
+    List<Acceleration> accList;
+
+    private int testSpeed=0;
 
     private NumberPicker.OnScrollListener scrollListener = new NumberPicker.OnScrollListener() {
         @Override
@@ -67,20 +86,20 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         }
     };
 
-//    private Thread testThread = new Thread(new Runnable() {
-//        @Override
-//        public void run() {
-//            for(int i=0;i<22;i++) {
-//                testSpeed+=5;
-//                testTimer();
-//                try {
-//                    Thread.sleep(100);
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//            }
-//        }
-//    });
+    private Thread testThread = new Thread(new Runnable() {
+        @Override
+        public void run() {
+            for(int i=0;i<22;i++) {
+                testSpeed+=5;
+                testTimer();
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    });
 
     public AccelerationFragment() {
         // Required empty public constructor
@@ -131,7 +150,53 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         txtSpeed = (TextView) v.findViewById(R.id.txtSpeed);
 
         listAcc = (RecyclerView) v.findViewById(R.id.acc_list);
-        listAcc.setAdapter(new AccelerationRecyclerViewAdapter(DbHandler.getAllAcc(), mListener));
+        accList = DbHandler.getAllAcc();
+        accListAdapter = new AccelerationRecyclerViewAdapter(accList, mListener);
+        listAcc.setAdapter(accListAdapter);
+
+        spnRange = (Spinner) v.findViewById(R.id.spinner_range);
+        spnRange.setAdapter(getRangeSpinnerAdapter());
+        spnRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String range = (String) parent.getItemAtPosition(position);
+                List<String> splitRange = Arrays.asList(range.split(" - "));
+                    List<Acceleration> newList = DbHandler.getAccByVehAndRange(currentVeh, splitRange.get(0), splitRange.get(1));
+                    accList.clear();
+                    assert newList != null;
+                    accList.addAll(newList);
+                accListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+        spnVeh = (Spinner) v.findViewById(R.id.spinner_vehicle);
+        spnVeh.setAdapter(getVehicleSpinnerAdapter());
+        spnVeh.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                accList.clear();
+                rangeList.clear();
+                currentVeh = DbHandler.getVehByName((String) parent.getItemAtPosition(position));
+                currentRange="";
+                rangeList.addAll(getRangeValues());
+                List<Acceleration> newList = DbHandler.getAccByVehAndRange(currentVeh, null, null);
+                assert newList != null;
+                accList.addAll(newList);
+                if(rangeAdapter!=null) {
+                    rangeAdapter.notifyDataSetChanged();
+                }
+                accListAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         return v;
     }
@@ -146,10 +211,47 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         return out;
     }
 
+    private List<String> getRangeValues() {
+        List<Acceleration> accList;
+        if(currentVeh==null) {
+            accList = DbHandler.getAllAcc();
+        }
+        else {
+            accList = DbHandler.getAccOfVeh(currentVeh);
+        }
+        Set<String> rangeSet = new HashSet<String>();
+        List<String> out = new ArrayList<>();
+        assert accList != null;
+        for(Acceleration acc : accList) {
+            rangeSet.add(acc.getFrom()+" - "+acc.getTo());
+        }
+        out.addAll(rangeSet);
+        return out;
+    }
+
+    private ArrayAdapter getRangeSpinnerAdapter() {
+        rangeList = getRangeValues();
+        return new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, rangeList);
+    }
+
+    private List<String> getVehicles() {
+        List<Vehicle> list = DbHandler.getVehicles();
+        List<String> out = new ArrayList<>();
+        for(Vehicle v : list) {
+            out.add(v.getName());
+        }
+        return out;
+    }
+
+    private ArrayAdapter getVehicleSpinnerAdapter() {
+        vehList = getVehicles();
+        return new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_item, vehList);
+    }
+
     private void startRecording()
     {
-//        if(!testThread.isAlive())
-//            testThread.start();
+        if(!testThread.isAlive())
+            testThread.start();
         btnStart.setText(R.string.stop);
         numPickStart.setEnabled(false);
         numPickFinish.setEnabled(false);
@@ -191,6 +293,7 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         if(isStarted) {
             if(((SpeedCommand) cmd).getMetricSpeed()>numPickFinish.getValue()) {
                 endMeasurement(true);
+                txtSpeed.setText(numPickFinish.toString());
             }
             else if(((SpeedCommand) cmd).getMetricSpeed()<=numPickStart.getValue()) {
                 endMeasurement(false);
@@ -272,25 +375,25 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         txtTimer.setText(sec+"."+strMs);
     }
 
-//    private void testTimer() {
-//
-//        getActivity().runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                txtSpeed.setText(Integer.toString(testSpeed));
-//
-//                if(isStarted) {
-//                    if(testSpeed>(numPickFinish.getValue()*PICKER_STEP)) {
-//                        endMeasurement(true);
-//                    }
-//                    else if(testSpeed<=(numPickStart.getValue()*PICKER_STEP)) {
-//                        endMeasurement(false);
-//                    }
-//                }
-//                else if(testSpeed>(numPickStart.getValue()*PICKER_STEP) && testSpeed<(numPickFinish.getValue()*PICKER_STEP)) {
-//                    startMeasurment();
-//                }
-//            }
-//        });
-//    }
+    private void testTimer() {
+
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                txtSpeed.setText(Integer.toString(testSpeed));
+
+                if(isStarted) {
+                    if(testSpeed>(numPickFinish.getValue()*PICKER_STEP)) {
+                        endMeasurement(true);
+                    }
+                    else if(testSpeed<=(numPickStart.getValue()*PICKER_STEP)) {
+                        endMeasurement(false);
+                    }
+                }
+                else if(testSpeed>(numPickStart.getValue()*PICKER_STEP) && testSpeed<(numPickFinish.getValue()*PICKER_STEP)) {
+                    startMeasurment();
+                }
+            }
+        });
+    }
 }

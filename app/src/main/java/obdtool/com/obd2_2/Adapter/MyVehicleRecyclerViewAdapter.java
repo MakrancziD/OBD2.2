@@ -13,6 +13,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
+import obdtool.com.obd2_2.Fragment.VehicleListFragment;
 import obdtool.com.obd2_2.Fragment.VehicleListFragment.OnListFragmentInteractionListener;
 import obdtool.com.obd2_2.R;
 import obdtool.com.obd2_2.db.DbHandler;
@@ -24,11 +25,14 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
 
     private final List<Vehicle> mValues;
     private final OnListFragmentInteractionListener mListener;
+    private final VehicleListFragment mFragment;
     private Context context;
 
-    public MyVehicleRecyclerViewAdapter(List<Vehicle> items, OnListFragmentInteractionListener listener) {
+
+    public MyVehicleRecyclerViewAdapter(List<Vehicle> items, OnListFragmentInteractionListener listener, VehicleListFragment fragment) {
         mValues = items;
         mListener = listener;
+        mFragment=fragment;
     }
 
     @Override
@@ -83,6 +87,7 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                         selectedVeh.setModel(edit_model.getText().toString());
                         DbHandler.editVehicle(selectedVeh);
                         editDialog.dismiss();
+                        mFragment.refreshList();
                     }
                 });
                 editDialog.show();
@@ -100,6 +105,7 @@ public class MyVehicleRecyclerViewAdapter extends RecyclerView.Adapter<MyVehicle
                     public void onClick(DialogInterface dialog, int which) {
                         DbHandler.deleteVehicle(selectedVeh);
                         dialog.dismiss();
+                        mFragment.refreshList();
                     }
                 });
                 builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {

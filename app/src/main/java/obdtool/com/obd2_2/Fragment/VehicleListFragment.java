@@ -79,7 +79,7 @@ public class VehicleListFragment extends Fragment implements ReceiverFragment {
             recyclerView.setLayoutManager(new GridLayoutManager(getContext(), mColumnCount));
         }
         vehList = DbHandler.getVehicles();
-        vehListAdapter = new MyVehicleRecyclerViewAdapter(vehList, mListener);
+        vehListAdapter = new MyVehicleRecyclerViewAdapter(vehList, mListener, this);
         recyclerView.setAdapter(vehListAdapter);
 
         return view;
@@ -112,8 +112,9 @@ public class VehicleListFragment extends Fragment implements ReceiverFragment {
         createDialog.show();
     }
 
-    private void refreshList() {
-        vehList = DbHandler.getVehicles();
+    public void refreshList() {
+        vehList.clear();
+        vehList.addAll(DbHandler.getVehicles());
         vehListAdapter.notifyDataSetChanged();
     }
 
