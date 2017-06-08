@@ -72,6 +72,12 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
         dtcCnt = (TextView) v.findViewById(R.id.dtc_cnt);
         dtcList = (ListView) v.findViewById(R.id.list_DTC);
         btnClear = (FloatingActionButton) v.findViewById(R.id.btn_clear);
+        btnClear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                clearDTC();
+            }
+        });
 
         dtcAdapter = new ArrayAdapter<String>(parentActivity, android.R.layout.simple_list_item_1, itemsDTC);
         dtcList.setAdapter(dtcAdapter);
@@ -86,6 +92,11 @@ public class DiagnosticFragment extends Fragment implements ReceiverFragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    private void clearDTC() {
+        parentActivity.ObdCommand("04");
+        new loadDiagDataAsync().execute();
     }
 
     @Override

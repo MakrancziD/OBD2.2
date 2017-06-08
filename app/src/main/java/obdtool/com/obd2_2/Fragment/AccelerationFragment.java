@@ -77,7 +77,7 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
     List<String> vehList;
     List<Acceleration> accList;
 
-    private int testSpeed=0;
+    //private int testSpeed=0;
 
     private NumberPicker.OnScrollListener scrollListener = new NumberPicker.OnScrollListener() {
         @Override
@@ -86,20 +86,25 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         }
     };
 
-    private Thread testThread = new Thread(new Runnable() {
-        @Override
-        public void run() {
-            for(int i=0;i<22;i++) {
-                testSpeed+=5;
-                testTimer();
-                try {
-                    Thread.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    });
+//    private Thread testThread = new Thread(new Runnable() {
+//        @Override
+//        public void run() {
+//            try {
+//                Thread.sleep(1000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//            for(int i=0;i<26;i++) {
+//                testSpeed+=2;
+//                testTimer();
+//                try {
+//                    Thread.sleep(182);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//    });
 
     public AccelerationFragment() {
         // Required empty public constructor
@@ -250,8 +255,8 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
 
     private void startRecording()
     {
-        if(!testThread.isAlive())
-            testThread.start();
+//        if(!testThread.isAlive())
+//            testThread.start();
         btnStart.setText(R.string.stop);
         numPickStart.setEnabled(false);
         numPickFinish.setEnabled(false);
@@ -375,25 +380,25 @@ public class AccelerationFragment extends Fragment implements ReceiverFragment {
         txtTimer.setText(sec+"."+strMs);
     }
 
-    private void testTimer() {
-
-        getActivity().runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                txtSpeed.setText(Integer.toString(testSpeed));
-
-                if(isStarted) {
-                    if(testSpeed>(numPickFinish.getValue()*PICKER_STEP)) {
-                        endMeasurement(true);
-                    }
-                    else if(testSpeed<=(numPickStart.getValue()*PICKER_STEP)) {
-                        endMeasurement(false);
-                    }
-                }
-                else if(testSpeed>(numPickStart.getValue()*PICKER_STEP) && testSpeed<(numPickFinish.getValue()*PICKER_STEP)) {
-                    startMeasurment();
-                }
-            }
-        });
-    }
+//    private void testTimer() {
+//
+//        getActivity().runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                txtSpeed.setText(Integer.toString(testSpeed));
+//
+//                if(isStarted) {
+//                    if(testSpeed>(numPickFinish.getValue()*PICKER_STEP)) {
+//                        endMeasurement(true);
+//                    }
+//                    else if(testSpeed<=(numPickStart.getValue()*PICKER_STEP)) {
+//                        endMeasurement(false);
+//                    }
+//                }
+//                else if(testSpeed>(numPickStart.getValue()*PICKER_STEP) && testSpeed<(numPickFinish.getValue()*PICKER_STEP)) {
+//                    startMeasurment();
+//                }
+//            }
+//        });
+//    }
 }
